@@ -22,7 +22,7 @@ if($res->num_rows > 0){
 		);
 }else{
 	//$insert dependent on table name
-	$insert = "INSERT into db.table VALUES ($username, $pw)";
+	$insert = "INSERT into db.table VALUES ($username, $pw, true)";
 
 	$ins = $conn->execute($insert);\
 	
