@@ -1,18 +1,20 @@
 .board {
     background-color: lightblue;
-    border: 1px solid #666;
+    border: 1px solid black;
     display: inline-block;
+    position: fixed;
 }
 
 #slider{
-    height: 600px;
+    height: 480px;
     float: left;
+    width: 100px;
    
 }
 
 .board {
-    padding: 10px;
-    margin: 5px;
+    padding: 0px;
+    margin: 0px;
 }
 
 #blue {
@@ -23,4 +25,9 @@
 
 .score {
     float:right;
+}
+
+.touchSurface {
+    background-color: yellow;
+    border: 1px solid black;
 }

@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" 
+  content="width=device-width, initial-scale=1.0, user-scalable=no">
         <title>Paddle Battle</title>
         <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -16,8 +18,7 @@
 
     </head>
     <body onunload="killSocket()">
-        <span id="locs"></span>
-        <div id="slider"></div>
+        <div id="slider" class="touchSurface"></div>
         <div class="board">
             <canvas id="gameboard" width="640" height="480" class="board" ></canvas>
         </div>
@@ -28,7 +29,13 @@
         <div id="hits" class="score">
             
         </div>
-   
+        
+        <br>
+        <br>
+        <br>
+        <div id="touch" class="score">
+        touch points
+        </div>
     
     <script src="http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/physicsjs-0.6.0/physicsjs-full-0.6.0.min.js"></script>
 

@@ -12,7 +12,6 @@ function handleOrientation(event) {
     //document.getElementById("locs").innerText = "Absolute: " + absolute + " Alpha:" + alpha + " Beta:" + beta + " Gamma:" + gamma;
     // Do stuff with the new orientation data
   }
-
  
 
 var ws = new WebSocket('ws://localhost:8080'); //ws://d08ae3c8.ngrok.io
@@ -97,6 +96,21 @@ function beginGame()
 
 
   $(document).ready(function() { //begin rendering only when the document has completely loaded
+    
+    var obj = document.getElementById('slider');
+    obj.addEventListener('touchmove', function(event) {
+      // If there's exactly one finger inside this element
+      if (event.targetTouches.length == 1) {
+        var touch = event.targetTouches[0];
+        // Place element where the finger is
+        document.getElementById('touch').innerHTML = "Touch Position-> X: " + touch.pageX + " Y: " + touch.pageY;
+        obj.style.left = touch.pageX + 'px';
+        obj.style.top = touch.pageY + 'px';
+        paddles[0].state.pos.y = touch.pageY;
+        ws.send(touch.pageY);
+      }
+    }, false);
+   /*
     $( "#slider" ).slider({
         orientation: "vertical",
         min: 0,
@@ -106,7 +120,7 @@ function beginGame()
             paddles[0].state.pos.y = (640-ui.value) -30;
             ws.send((640-ui.value) -30);
           }
-    });
+    }); */
     
     world = Physics();
     var renderer = Physics.renderer("canvas",{
