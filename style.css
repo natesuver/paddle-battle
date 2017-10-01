@@ -1,0 +1,26 @@
+.board {
+    background-color: lightblue;
+    border: 1px solid #666;
+    display: inline-block;
+}
+
+#slider{
+    height: 600px;
+    float: left;
+   
+}
+
+.board {
+    padding: 10px;
+    margin: 5px;
+}
+
+#blue {
+    background-color: blue;
+    height: 10px;
+    width: 10px;
+}
+
+.score {
+    float:right;
+}
