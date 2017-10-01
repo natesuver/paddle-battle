@@ -1,0 +1,19 @@
+CREATE TABLE Users (
+    ID int NOT NULL AUTO_INCREMENT,
+    LastName varchar(255),
+    FirstName varchar (255),
+	Password int,
+IsLoggedIn bit,
+);
+
+
+INSERT INTO Users (ID, LastName, FirstName, Password)
+VALUES (value1, value2, value3, value4); 
+
+
+SELECT Password FROM Users Where LastName=? AND FirstName=?;
+
+
+SELECT Users.LastName AND Users.FirstName FROM Users WHERE Users.LastName = ? AND Users.FirstName =?;
+
+
