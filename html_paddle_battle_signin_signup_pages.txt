@@ -1,0 +1,153 @@
+******HTML and CSS Welcome Page******
+<!--This page includes the links to signing in and signing up-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Paddle Battle</title>
+  </head>
+
+  <body>
+    <h3>Welcome to</h3>
+    <h1>Paddle Battle</h1>
+    <p>Returning players</p>
+    <!--directs user to sign in page-->
+    <a href = "SignIn.html"><input type="submit" value="Sign In"/></a>
+    <p>Not a member?</p>
+    <!--directs new user to rules page-->
+    <a href = "UserRules.html"><input type="submit" value="Sign Up"/></a> 
+  </body>
+</html>
+
+*CSS*
+html {
+  background-color: Black;
+}
+
+h3 {
+  color: White;
+  text-align: center;
+}
+
+h1 {
+  color: White;
+  text-align: center;
+}
+
+p{
+  color: White;
+  text-align: center;
+}
+p, a[type="submit"] {
+  display: block;
+  text-align: center;
+}  
+
+******HTML and CSS Existing Member Sign In******
+<!--for existing users to sign in and will direct them to game selection once signed in-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Sign In</title>
+  </head>
+  
+  <form method="get">
+    <p>Welcome back to Paddle Battle! Please Sign In!</p>
+    <p>Username: <input type = "text" name = "username"/></p>
+    <p>Password: <input type = "password" name = "password"/></p>
+    <!--link to game selection-->
+    <a href = "GameRoom.html"><input type="submit" value="Enter"/></a> 
+  </form>
+</html>
+
+*CSS*
+html {
+  background-color: Black;
+}
+
+p{
+  font-size: 40px;
+  color: White;
+  text-align: center;
+}
+p, a[type="submit"] {
+  display: block;
+  text-align: center;
+}
+
+******HTML and CSS New User Rules******
+<!--If new user selected to sign up, it directs them here to read rules-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Rules</title>
+  </head>
+
+  <body>
+    <h2>Rules of Paddle Battle</h2>
+    <p>Please read the rules of Paddle Battle before registering. To continue, click "Create Username and Password".</p>
+    <p>Rules:<br>
+      1. rule 1<br>
+      2. rule 2<br>
+      3. rule 3<br>
+      4. Have fun!</p>
+    <!--link to create username and password-->
+    <a href = "Register.html"><input type="submit" value="Create Username and Password"/></a>
+  </body>
+</html>
+
+*CSS*
+html {
+  background-color: Black;
+}
+
+p{
+  font-size: 40px;
+  color: White;
+  text-align: center;
+}
+
+p, a[type="submit"] {
+  display: block;
+  text-align: center;
+}
+
+******HTML and CSS New User Sign Up******
+<!--new user sign up page-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Sign Up</title>
+  </head>
+  
+  <form method="post">
+    <p>Please Sign Up!</p>
+    <p>Username: <input type = "text" name = "username"/></p>
+    <p>Password: <input type = "password" name = "password"/></p>
+    <a href = "GameRoom.html"><input type="submit" value="Enter"/></a> 
+  </form>
+</html> 
+
+*CSS*
+html {
+  background-color: Black;
+}
+
+p{
+  font-size: 40px;
+  color: White;
+  text-align: center;
+}
+
+p, a[type="submit"] {
+  display: block;
+  text-align: center;
+}
+
+******HTML Game Selection starter******
+<!--just for a start of the game room-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game Selection</title>
+  </head>
+</html>
