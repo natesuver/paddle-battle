@@ -3,15 +3,14 @@ var world;
 const defaultHeight = 70;
 var teamAScore = 0;
 var teamBScore = 0;
-window.addEventListener("deviceorientation", handleOrientation, true);
-function handleOrientation(event) {
-    var absolute = event.absolute;
-    var alpha    = event.alpha;
-    var beta     = event.beta;
-    var gamma    = event.gamma;
-    //document.getElementById("locs").innerText = "Absolute: " + absolute + " Alpha:" + alpha + " Beta:" + beta + " Gamma:" + gamma;
-    // Do stuff with the new orientation data
+window.onresize = function() {
+    $(document.body).width(window.innerWidth).height(window.innerHeight);
   }
+
+  $(function() {
+    window.onresize();
+  });
+
  
 
 var ws = new WebSocket('ws://localhost:8080'); //ws://d08ae3c8.ngrok.io

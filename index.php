@@ -2,8 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" 
-  content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width; initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5 user-scalable=no; " />
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <!--meta name="viewport" 
+  content="width=device-width, initial-scale=1.0, user-scalable=no" -->
         <title>Paddle Battle</title>
         <script
         src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -20,7 +23,7 @@
     <body onunload="killSocket()">
         <div id="slider" class="touchSurface"></div>
         <div class="board">
-            <canvas id="gameboard" width="640" height="480" class="board" ></canvas>
+            <canvas id="gameboard"  class="board" ></canvas>
         </div>
         <div id="score" class="score">
             This is my score:
