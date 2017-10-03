@@ -45,7 +45,7 @@
 	<div>
 		<div class="row text-center">
 			<div class="col-md-12">
-				Not registered?  Sign up <a href="/register.html">here!</a>
+				Not registered?  Sign up <a href="../signup/signup.php">here!</a>
 			</div>
 		</div>
 	</div>
