@@ -6,12 +6,14 @@ var username = '';
 //set submit button to disabled to start
 $('input[name="submit"]').prop('disabled', true);
 
-//verify form on any input keyup
 $('input').keyup(function(){
 	verifyForm();
 });
 
-//check for password match on any password input keyup
+$('input[type="submit"]').click(function(){
+	submit();
+});
+
 $('input[type="password"]').keyup(function(){
 	var passwordMatch = checkPasswords();
 	if(passwordMatch){
@@ -57,4 +59,28 @@ function checkPasswords(){
 	}else{
 		return false;
 	}
+}
+
+function submit(){
+	pword = $('input[name="password"]').val();
+	cPword = $('input[name="password_confirm"]').val();
+	username = $('#login_username').val();
+
+	$.ajax({
+		url: "regValidation.php",
+		type: "POST",
+		data: {
+				username: username,
+				pw: cPword
+			},
+			success: function(data){
+				if(data['isValid'] == false){
+					updateFeedback(data['feedback'], 'red');
+				}
+			},
+			error: function(){
+				updateFeedback('Something went wrong', 'red');
+			}
+		}
+	});
 }
