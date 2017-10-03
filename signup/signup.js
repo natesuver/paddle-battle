@@ -81,6 +81,5 @@ function submit(){
 			error: function(){
 				updateFeedback('Something went wrong', 'red');
 			}
-		}
 	});
 }
