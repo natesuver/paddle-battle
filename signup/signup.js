@@ -32,6 +32,8 @@ function verifyForm(){
 		var passwordsMatch = checkPasswords();
 		if(passwordsMatch){
 			$('input[name="submit"]').prop('disabled', false);
+		}else{
+			$('input[name="submit"]').prop('disabled', true);
 		}
 	}else{
 		$('input[name="submit"]').prop('disabled', true);
