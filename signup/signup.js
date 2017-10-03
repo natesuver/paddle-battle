@@ -33,6 +33,8 @@ function verifyForm(){
 		if(passwordsMatch){
 			$('input[name="submit"]').prop('disabled', false);
 		}
+	}else{
+		$('input[name="submit"]').prop('disabled', true);
 	}
 }
 
