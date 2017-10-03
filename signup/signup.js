@@ -1,22 +1,56 @@
+
 var pword = '';
 var cPword = '';
+var username = '';
 
+//set submit button to disabled to start
+$('input[name="submit"]').prop('disabled', true);
+
+//verify form on any input keyup
+$('input').keyup(function(){
+	verifyForm();
+});
+
+//check for password match on any password input keyup
 $('input[type="password"]').keyup(function(){
-	pword = $('input[name="password"]').val();
-	cPword = $('input[name="password_confirm"]').val();
-
-	if(pword === cPword){
+	var passwordMatch = checkPasswords();
+	if(passwordMatch){
 		var text = "Passwords match";
 		updateFeedback(text, 'green');
-		$('input[name="submit"]').prop('disabled', false);
 	}else{
 		var text = "Passwords don't match!";
 		updateFeedback(text, 'red');
-		$('input[name="submit"]').prop('disabled', true);
 	}
 });
+
+function verifyForm(){
+	pword = $('input[name="password"]').val();
+	cPword = $('input[name="password_confirm"]').val();
+	username = $('#login_username').val();
+
+	if(pword && cPword && username){
+		var passwordsMatch = checkPasswords();
+		if(passwordsMatch){
+			$('input[name="submit"]').prop('disabled', false);
+		}
+	}
+}
 
 function updateFeedback(text, color='black'){
 	$('#feedback_display').text(text);
 	$('#feedback_display').css('color', color);
+}
+
+function checkPasswords(){
+	pword = $('input[name="password"]').val();
+	cPword = $('input[name="password_confirm"]').val();
+	if(pword && cPword){
+		if(pword === cPword){
+			return true;
+		}else{
+			return false;
+		}
+	}else{
+		return false;
+	}
 }
