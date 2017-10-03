@@ -14,7 +14,7 @@
 	</div>
 	<div id="login_form_wrapper">
 		<div class="row text-center">
-			<form action = "regValidation.php" method="POST">
+			<form method="POST">
 				<div class="row">
 					<div class="col-md-12">
 						Username: <input id="login_username" type='text' name='username'></input>
