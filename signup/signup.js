@@ -77,7 +77,7 @@ function submit(){
 			if(response['isValid'] == false){
 				updateFeedback(response['feedback'], 'red');
 			}else{
-				window.location = 'lobby.php';
+				window.location = '../game/lobby.php';
 			}
 		},
 		error: function(response){
