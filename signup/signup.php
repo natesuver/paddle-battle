@@ -14,7 +14,6 @@
 	</div>
 	<div id="login_form_wrapper">
 		<div class="row text-center">
-			<form method="POST">
 				<div class="row">
 					<div class="col-md-12">
 						Username: <input id="login_username" type='text' name='username'></input>
@@ -35,10 +34,9 @@
 				<br>
 				<div class="row">
 					<div class="col-md-12">
-						<input id ="login_button" type='submit' value="Sign Up" name='submit'></input>
+						<button id ="submit_button" class="btn">Sign Up</button>
 					</div>
 				</div>
-			</form>
 		</div>
 	</div>
 	<div class="row text-center" id="feedback_display">
