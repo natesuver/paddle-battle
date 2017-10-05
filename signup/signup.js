@@ -1,16 +1,15 @@
-
 var pword = '';
 var cPword = '';
 var username = '';
 
 //set submit button to disabled to start
-$('input[name="submit"]').prop('disabled', true);
+$('#submit_button').prop('disabled', true);
 
 $('input').keyup(function(){
 	verifyForm();
 });
 
-$('input[type="submit"]').click(function(){
+$('#submit_button').click(function(){
 	submit();
 });
 
@@ -33,12 +32,12 @@ function verifyForm(){
 	if(pword && cPword && username){
 		var passwordsMatch = checkPasswords();
 		if(passwordsMatch){
-			$('input[name="submit"]').prop('disabled', false);
+			$('#submit_button').prop('disabled', false);
 		}else{
-			$('input[name="submit"]').prop('disabled', true);
+			$('#submit_button').prop('disabled', true);
 		}
 	}else{
-		$('input[name="submit"]').prop('disabled', true);
+		$('#submit_button').prop('disabled', true);
 	}
 }
 
@@ -67,19 +66,22 @@ function submit(){
 	username = $('#login_username').val();
 
 	$.ajax({
-		url: "regValidation.php",
 		type: "POST",
+		url: "regValidation.php",
 		data: {
-				username: username,
-				pw: cPword
-			},
-			success: function(data){
-				if(data['isValid'] == false){
-					updateFeedback(data['feedback'], 'red');
-				}
-			},
-			error: function(){
-				updateFeedback('Something went wrong', 'red');
+			username: username,
+			password: pword,
+		},
+		dataType: 'json',
+		success: function(response){
+			if(response['isValid'] == false){
+				updateFeedback(response['feedback'], 'red');
+			}else{
+				window.location = '../game/lobby.php';
 			}
-	});
+		},
+		error: function(response){
+			updateFeedback('Something went wrong', 'red');
+		}
+	})
 }

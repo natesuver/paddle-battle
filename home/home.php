@@ -15,7 +15,6 @@
 	</div>
 	<div id="login_form_wrapper">
 		<div class="row text-center">
-			<form action = "" method="POST">
 				<div class="row">
 					<div class="col-md-12">
 						Username: <input id="login_username" type='text' name='username'></input>
@@ -30,18 +29,15 @@
 				<br>
 				<div class="row">
 					<div class="col-md-12">
-						<input id ="login_button" type='submit' value="Log In" name='submit'></input>
+						<button id ="submit_button" class="btn">Sign Up</button>
 					</div>
 				</div>
-			</form>
 		</div>
 	</div>
-	<br>
-	<br>
-	<div class="row">
+	<div class="row text-center">
 		<div id="feedback_display" class="col-md-12">
-		</div>
 	</div>
+	<br>
 	<div>
 		<div class="row text-center">
 			<div class="col-md-12">
@@ -53,4 +49,6 @@
 </body>
 </html>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="home.js"></script>
