@@ -29,7 +29,7 @@
 				<br>
 				<div class="row">
 					<div class="col-md-12">
-						<button id ="submit_button" class="btn">Sign Up</button>
+						<button id ="submit_button" class="btn">Log In</button>
 					</div>
 				</div>
 		</div>
