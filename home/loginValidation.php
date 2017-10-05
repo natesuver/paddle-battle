@@ -1,42 +1,51 @@
-<? php
+<?php
+
 $user = $_POST["username"];
 $pw = $_POST["password"];
 $savedPw = "";
 
-$conn = "???";
-$query = "SELECT * from db.table_name where table_name.username = $user";
+$conn = mysqli_connect('mysql5.gear.host', 'paddlebattle', 'Nu7n472~Cj!k', 'paddlebattle');
+$query = "SELECT * from users where username = '$user'";
 
-$res = $conn->query($query);
+$res = mysqli_query($conn, $query);
 
-if($res->num_rows == 0){
-	return array(
+if(mysqli_num_rows($res) != 1){
+	$data = array(
 		"isValid"=> false,
 		"feedback"=> "User not found."
 		);
+	echo json_encode($data);
+	exit;
 }else{
-	$savedPw = $res["pw"];
+	$row = $res->fetch_row();
+	$savedPw = $row[2];
 }
 
 if($pw === $savedPw){
-	$update = "UPDATE db.table SET isLoggedIn=true WHERE table_name.user = $user";
-	$up = $conn->execute($update);
-
+	$update = "UPDATE users SET isLoggedIn=true WHERE username = '$user'";
+	$up = mysqli_query($conn, $update);
 	if($up){
-		return array(
+		$data = array(
 			"isValid"=> true,
 			"feedback"=>"Logged in!"
 			);
+		echo json_encode($data);
+		exit;
 	}else{
-		return array(
+		$data = array(
 			"isValid"=> false,
 			"feedback"=>"Something went wrong."
 			);
+		echo json_encode($data);
+		exit;
 	}
 }else{
-	return array(
+	$data = array(
 		"isValid"=> false,
 		"feedback"=> "Incorrect password."
 		);
+	echo json_encode($data);
+	exit;
 }
 
 ?>
