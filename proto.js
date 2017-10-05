@@ -13,7 +13,7 @@ window.onresize = function() {
 
  
 
-var ws = new WebSocket('ws://localhost:8080'); //ws://d08ae3c8.ngrok.io
+var ws = new WebSocket('ws://eeffb195.ngrok.io'); //ws://d08ae3c8.ngrok.io //ws://localhost:8080
   
 ws.onmessage = function (event) {
     var position = parseInt(event.data);
