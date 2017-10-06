@@ -1,17 +1,18 @@
-<? php
+<?php
 
-$conn = "??";
+$conn = mysqli_connect(getenv('PB_SERVER_NAME'), getenv('PB_USER_NAME'), getenv('PB_DATABASE_PASSWORD'), getenv('PB_DATABASE_NAME'));
 
+//$user could likely come from session variable; is post variable for now
 $user = $_POST["username"];
 
-$update = "UPDATE db.table_name SET isLoggedIn = false WHERE table_name.username = $user";
+$update = "UPDATE users SET isLoggedIn = false WHERE username = '$user'";
 
-$up = $conn->execute($update);
+$res = mysqli_query($conn, $update);
 
-if($up){
+if($res){
 	return array(
 		'isValid' => true,
-		'feedback' => 'Successfully logged out.'
+		'feedback' => "You successfully logged out.  You will now be redirected back to the home page."
 	);
 }else{
 	return array(
