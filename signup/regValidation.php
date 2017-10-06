@@ -7,7 +7,7 @@ $username = $_POST["username"];
 $pw = $_POST["password"];
 
 //$conn dependent on our DB host settings
-$conn = mysqli_connect('mysql5.gear.host', 'paddlebattle', 'Nu7n472~Cj!k', 'paddlebattle');
+$conn = mysqli_connect(getenv('PB_SERVER_NAME'), getenv('PB_USER_NAME'), getenv('PB_DATABASE_PASSWORD'), getenv('PB_DATABASE_NAME'));
 
 //$query dependent on table name, column names
 $query = "SELECT * FROM users WHERE username = '$username'";
