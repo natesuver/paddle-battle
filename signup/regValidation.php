@@ -1,4 +1,6 @@
 <?php
+require '../common/database.php';
+session_start();
 /*
 THIS SCRIPT IS A CHECK FOR WHETHER A SUBMITTED USERNAME ALREADY EXISTS
 returns array
@@ -6,7 +8,7 @@ returns array
 $username = $_POST["username"];
 $pw = password_hash($_POST["password"], PASSWORD_DEFAULT);
 //$conn dependent on our DB host settings
-$conn = mysqli_connect(getenv('PB_SERVER_NAME'), getenv('PB_USER_NAME'), getenv('PB_DATABASE_PASSWORD'), getenv('PB_DATABASE_NAME'));
+$conn = getConnection();
 
 //$query dependent on table name, column names
 $query = "SELECT * FROM users WHERE username = '$username'";
@@ -29,7 +31,7 @@ if(mysqli_num_rows($res) != 0){
 			'isValid' => true,
 			'feedback' => "All good!"
 			);
-
+		$_SESSION['username'] = $username;
 		echo json_encode($data);
 		exit;
 	}else{

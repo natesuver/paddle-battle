@@ -1,10 +1,15 @@
 <?php
+require '../common/database.php';
+session_start();
+if (isset($_SESSION['username'])) {
+	header( 'Location: ../game/lobby.php' ); //user is already logged in, go right to lobby.
+}
 
 $user = $_POST["username"];
 $pw = $_POST["password"];
 $savedPw = "";
 
-$conn = mysqli_connect(getenv('PB_SERVER_NAME'), getenv('PB_USER_NAME'), getenv('PB_DATABASE_PASSWORD'), getenv('PB_DATABASE_NAME'));
+$conn = getConnection();
 $query = "SELECT * from users where username = '$user'";
 
 $res = mysqli_query($conn, $query);
@@ -29,6 +34,7 @@ if(password_verify($pw,$savedPw)) {
 			"isValid"=> true,
 			"feedback"=>"Logged in!"
 			);
+		$_SESSION['username'] = $user;
 		echo json_encode($data);
 		exit;
 	}else{
