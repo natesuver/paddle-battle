@@ -21,7 +21,7 @@ if(mysqli_num_rows($res) != 1){
 	$savedPw = $row[2];
 }
 
-if($pw === $savedPw){
+if(password_verify($pw,$savedPw)) { 
 	$update = "UPDATE users SET isLoggedIn=true WHERE username = '$user'";
 	$up = mysqli_query($conn, $update);
 	if($up){

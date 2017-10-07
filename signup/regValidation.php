@@ -4,8 +4,7 @@ THIS SCRIPT IS A CHECK FOR WHETHER A SUBMITTED USERNAME ALREADY EXISTS
 returns array
 */
 $username = $_POST["username"];
-$pw = $_POST["password"];
-
+$pw = password_hash($_POST["password"], PASSWORD_DEFAULT);
 //$conn dependent on our DB host settings
 $conn = mysqli_connect(getenv('PB_SERVER_NAME'), getenv('PB_USER_NAME'), getenv('PB_DATABASE_PASSWORD'), getenv('PB_DATABASE_NAME'));
 
