@@ -39,8 +39,8 @@ function createBall(Physics, i) {
 	var ball = Physics.body('circle', {
         x: 250+i, //starting x coordinate
         y: 250+i, //starting y coordinate
-        vx: 0.5	, //starting x velocity
-        vy: 0.5, //starting y velocity
+        vx: 0.2	, //starting x velocity
+        vy: 0.2, //starting y velocity
         radius: 15,
         cof: 0.00, //drag coefficient
         styles: {

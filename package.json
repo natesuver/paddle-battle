@@ -1,0 +1,35 @@
+{
+  "name": "paddle-battle",
+  "version": "1.0.0",
+  "description": "multiplayer online table tennis",
+  "main": "karma.conf.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "dependencies": {
+    "jasmine-jquery": "^2.1.1",
+    "jasmine": "^2.8.0",
+    "jasmine-core": "^2.8.0",
+    "jquery": "^3.2.1",
+    "karma": "^1.7.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "puppeteer": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natesuver/paddle-battle.git"
+  },
+  "author": "Nate, Mike, Kyle, Kam, Virginia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/natesuver/paddle-battle/issues"
+  },
+  "homepage": "https://github.com/natesuver/paddle-battle#readme"
+}
