@@ -5,4 +5,7 @@ describe("I will know this test is good when", function() {
     it("i do a 2nd thing and it works good too", function() {
         expect("2").toBe("2");
     });
+    it("i do a 3rd thing and it works good too", function() {
+        expect("3").toBe("3");
+    });
 });
