@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/natesuver/paddle-battle/issues"
   },
-  "homepage": "https://github.com/natesuver/paddle-battle#readme"
+  "homepage": "https://github.com/natesuver/paddle-battle#readme",
+  "devDependencies": {
+    "jasmine-fixture": "^2.0.0"
+  }
 }

@@ -15,11 +15,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/**/jquery.min.js',
+      'node_modules/**/jasmine-fixture.min.js',
       'game/countdown.js',
       'test/**/*.js'
     ],
-
-
     // list of files to exclude
     exclude: [
     ],

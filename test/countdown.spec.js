@@ -1,11 +1,36 @@
-describe("I will know this test is good when", function() {
-    it("i do a thing and it works good", function() {
-        expect("1").toBe("1");
-    });
-    it("i do a 2nd thing and it works good too", function() {
-        expect("2").toBe("2");
-    });
-    it("i do a 3rd thing and it works good too", function() {
-        expect("3").toBe("3");
+describe("Countdown", function() {
+    var cd;
+    describe("will execute", function() {
+        beforeEach(function() {
+            affix("#countdown");
+            var ele = $("#countdown");
+            cd = new Countdown(ele,6,"FIGHT");
+        });
+        it("a beginCountdown method that starts the countdown", function() {
+            spyOn(cd,'doCount').and.callFake(function() {
+                return true;
+            });
+            cd.beginCountdown();
+            expect(cd.doCount).toHaveBeenCalled();
+        });
+    })
+    describe("runs a countdown", function() {
+        beforeEach(function() {
+            affix("#countdown");
+            var ele = $("#countdown");
+            cd = new Countdown(ele,6,"FIGHT");
+        });
+
+        it("which recursively hits doCount 7 times and sets a dom element to FIGHT", function() {
+            spyOn(window,'setTimeout').and.callFake(function(funcToCall,duration) {
+                funcToCall();
+            });
+            spyOn(cd,'doCount').and.callThrough();
+            cd.beginCountdown();
+            expect(window.setTimeout).toHaveBeenCalled();
+            expect(cd.doCount).toHaveBeenCalled();
+            expect(cd.doCount.calls.count()).toBe(7);
+            expect(document.getElementById("countdown").innerText).toBe("FIGHT");
+        });
     });
 });

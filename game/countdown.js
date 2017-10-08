@@ -1,8 +1,9 @@
 class Countdown {
-    constructor(elementId, countFrom, terminalStatement) {
-      this.elementId = elementId;
+    constructor(element, countFrom, terminalStatement) {
+      this.element = element; //
       this.countFrom = countFrom;
       this.terminalStatement = terminalStatement;
+      this.countdownDuration = 800;
     }
     beginCountdown() {
         this.doCount(this.countFrom);       
@@ -10,23 +11,23 @@ class Countdown {
     doCount(increment) {
         var that = this;
         setTimeout(function() {
-            $("#"+ that.elementId).fadeIn(0);
-            that.setCountdownName(increment, that.elementId);
-            $("#"+ that.elementId).fadeOut(countdownDuration);
+            that.element.fadeIn(0);
+            that.setCountdownName(increment, that.element);
+            that.element.fadeOut(that.countdownDuration);
             if (increment>0) {
                 that.doCount(--increment);
             }
-        },countdownDuration);
+        },that.countdownDuration);
     }
     
-    setCountdownName(increment, elementId) {
+    setCountdownName(increment, element) {
         if (increment===0) {
-            document.getElementById(elementId).innerHTML = this.terminalStatement;
-            $("#"+ elementId).css('color', 'red');
-            $("#"+ elementId).css('font-weight', 'bolder');
+            element.text(this.terminalStatement);
+            element.css('color', 'red');
+            element.css('font-weight', 'bolder');
         }
         else {
-            document.getElementById(elementId).innerHTML = increment;
+            element.text(increment);
         }
     }
   }
