@@ -1,8 +1,12 @@
-.board {
+.boardLayout {
     background-color: lightblue;
     border: 1px solid black;
     display: inline-block;
     position: fixed;
+    padding: 0px;
+    margin: 0px;
+    width:550px;
+    height:550px;
 }
 
 #slider{
@@ -10,13 +14,6 @@
     float: left;
     width: 100px;
    
-}
-
-.board {
-    padding: 0px;
-    margin: 0px;
-    width:640px;
-    height:480px;
 }
 
 #blue {

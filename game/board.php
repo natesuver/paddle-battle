@@ -11,11 +11,21 @@ if (!isset($_SESSION['username'])) {
         <title>Paddle Battle!!</title>
     </head>
 
-    <div id="countdown"> 
+    <div id="countdown" class="text-center"> 
         
     </div>
+    <div id="gameSurface" style="visible: hidden;">
+        <div class="gameTitle"> </div>
+        <div class="touchSurface"> </div>
+        <canvas id="gameBoard" ></canvas>
+        <div class="gameStatus"> </div>
+    </div>  
+    
+    <script src="http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/physicsjs-0.6.0/physicsjs-full-0.6.0.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
+    <script src="boardView.js"></script>
     <script src="board.js"></script>
     <script src="countdown.js"></script>
 </html>
