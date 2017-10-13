@@ -1,20 +1,23 @@
 class Relay {
-    constructor(gameId,serverUrl,listener){
-        this.gameId = gameId;
+    constructor(serverUrl,listener){
         this.serverUrl = serverUrl;
         this.connected = false;
         this.listener = listener;
-        this.ws = new WebSocket(this.serverUrl); 
+        this.socket = new ReconnectingWebSocket(this.serverUrl, null, {debug: true, reconnectInterval: 500});
     }
 
     connect() {
-        this.send({"type":"ping"})
-        ws.onmessage = function (data) {
-            var returnValue = JSON.parse(data);
-            if (returnValue.type==="ping" && returnValue.result==="OK")
-                this.connected = true;
-            this.listener(event);
+        this.socket.open();
+        this.socket.addEventListener('open', this.onOpen);
+        socket.onmessage = function (data) {
+            this.listener(JSON.parse(data));
         };
+    }
+
+    onOpen() {
+        console.log('socket opened');
+        this.connected = true;
+        this.listener(JSON.parse({status: "ok"}));
     }
 
     send(message) {

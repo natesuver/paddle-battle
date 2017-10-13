@@ -31,6 +31,9 @@
   },
   "homepage": "https://github.com/natesuver/paddle-battle#readme",
   "devDependencies": {
-    "jasmine-fixture": "^2.0.0"
+    "ReconnectingWebSocket": "github:joewalnes/reconnecting-websocket",
+    "jasmine-fixture": "^2.0.0",
+    "lodash": "^4.17.4",
+    "reconnecting-websocket": "^3.2.2"
   }
 }
