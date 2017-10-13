@@ -3,13 +3,13 @@ var game;
 $(document).ready(function() { 
     boardCanvas = $("#gameSurface");
     boardCanvas.hide();
-    game = new boardView($("#gameBoard"));
-    startCountdown();
+    game = new View($("#gameBoard"), [{"name":"Nate"}, {"name":"Steve"}, {"name":"Lil Billy"}, {"name":"Walde"}, {"name":"Torrit"}], [{"name":"Jenny"}, {"name":"Karen"}, {"name":"Tina"}, {"name":"Jack"}, {"name":"Jammer"}]);
+    //startCountdown();
+    startGame();
 });
 
 function startGame() {
     boardCanvas.fadeIn(800);
-    game.addBall();
     game.start();
 }
 

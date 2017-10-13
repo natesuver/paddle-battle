@@ -25,7 +25,10 @@ if (!isset($_SESSION['username'])) {
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
-    <script src="boardView.js"></script>
+    <!-- <script src="../node_modules/lodash/lodash.min.js"> </script> -->
+    <script src="view.js"></script>
     <script src="board.js"></script>
     <script src="countdown.js"></script>
+    <script src="paddle.js"></script>
+    <script src="ball.js"></script>
 </html>
