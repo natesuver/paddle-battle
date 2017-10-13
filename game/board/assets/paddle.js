@@ -15,12 +15,21 @@ class Paddle{
         this.color = this.colors[playerIndex];
         this.hitCount= 0;
         this.currentPlayer = player;
+        this.observers = [];
         //let this linger, in case we want to bind to images at some point.
         //paddle.view = new Image 
         //paddle.view.id = "blue";
         //paddle.view.src = 'img/polkadot.png';
     }
-
+    subscribe(event) {
+        this.observers.push(event);
+    }
+    unsubscribe(event) {
+        _.remove(this.observers, function(n) {
+             return n===event;   
+        });
+    }
+    
     get body() { return this.paddleBody;}
     get hits() {return this.hitCount;}
     get player() {return this.currentPlayer;}

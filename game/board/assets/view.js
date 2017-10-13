@@ -13,7 +13,7 @@ class View {
                 ,{ bodyB: { name: 'circle' } }
             ]
         });
-        View.world = Physics(); //world must be static
+        View.world = Physics();
         var that = this;
         var renderer = Physics.renderer("canvas",{
             el: this.boardElement[0].id,	// canvas element id

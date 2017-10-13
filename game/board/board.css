@@ -1,0 +1,48 @@
+#countdown {
+	font-size: 30vw;
+	font-size: 30vh;
+	position: absolute;
+	z-index: 0;
+    width: 100px;
+    height: 50px;
+    top: 30%;
+    left: 40%;
+}
+
+#gameboard {
+    background-color: lightblue;
+    border: 1px solid black;
+    display: inline-block;
+    position: fixed;
+    padding: 0px;
+    margin: 0px;
+    width:550px;
+	height:550px;
+	z-index:1;
+}
+
+.touchSurface {
+    background-color: rgb(250, 250, 0);
+	border: 1px solid black;
+	height:550px;
+	width: 80px;
+	float: left;
+	margin-right: 4px;
+}
+.gameStatus {
+    background-color: whitesmoke;
+	border: 1px solid black;
+	height:550px;
+	min-width: 140px;
+	float: right;
+}
+
+.gameTitle {
+    background-color: whitesmoke;
+	border: 1px solid black;
+	height:50px;
+	width: 100%;
+	float: top;
+	
+}
+

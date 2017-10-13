@@ -1,6 +1,6 @@
 class Countdown {
     constructor(element, countFrom, terminalStatement, onStart) {
-      this.element = element; //
+      this.element = element;
       this.countFrom = countFrom;
       this.terminalStatement = terminalStatement;
       this.countdownDuration = 800;
