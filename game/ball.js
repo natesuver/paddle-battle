@@ -11,6 +11,7 @@ class Ball {
                 fillStyle: 'black'
             }
         });
+        //this.ballBody.label = "ball";
     }
 
     get body() {return this.ballBody;}

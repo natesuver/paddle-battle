@@ -4,8 +4,7 @@ $(document).ready(function() {
     boardCanvas = $("#gameSurface");
     boardCanvas.hide();
     game = new View($("#gameBoard"), [{"name":"Nate"}, {"name":"Steve"}, {"name":"Lil Billy"}, {"name":"Walde"}, {"name":"Torrit"}], [{"name":"Jenny"}, {"name":"Karen"}, {"name":"Tina"}, {"name":"Jack"}, {"name":"Jammer"}]);
-    //startCountdown();
-    startGame();
+    startCountdown();
 });
 
 function startGame() {
@@ -14,6 +13,6 @@ function startGame() {
 }
 
 function startCountdown() {
-    var cd = new Countdown($("#countdown"),0,"Go!", startGame);
+    var cd = new Countdown($("#countdown"),5,"Go!", startGame);
     cd.beginCountdown();
 }

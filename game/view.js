@@ -4,11 +4,15 @@ class View {
         this.teamAPlayers = teamA; //an array of objects, each object is a player
         this.teamBPlayers = teamB; //an array of objects, each object is a player
         this.initialize();
-        
     }
 
     initialize() {
-        
+        View.paddleColissionQuery= Physics.query({
+            $or: [
+                { bodyA: { name: 'circle' } }
+                ,{ bodyB: { name: 'circle' } }
+            ]
+        });
         View.world = Physics(); //world must be static
         var that = this;
         var renderer = Physics.renderer("canvas",{
@@ -17,6 +21,7 @@ class View {
             height: this.boardElement.height(),		// canvas height
             meta: false // setting this to "true" will display metrics (frames per second)
         });	
+
         View.world.add(renderer);    
         View.world.add( Physics.behavior('sweep-prune') );
         var bounds = Physics.aabb(0, 0, this.boardElement.width(), this.boardElement.height()); //define the boundaries of our container.
@@ -32,14 +37,26 @@ class View {
         Physics.util.ticker.on(function( time, dt ){
             View.world.step( time );
         });
-        
+
         View.world.on('collisions:detected', function( data ){
-           /*  if (data.collisions.length>0) {
-                recordCollission(data.collisions[ 0 ]);
+            var found = Physics.util.find( data.collisions, View.paddleColissionQuery );
+            if ( found ){
+                console.log("Strike!");    //TODO: do something with this data.  something nice.  
             }
-            */
         });
-        
+        /*
+        Physics.body.mixin('collide', function( entity ){
+            if ( entity.id === "ball"){
+                if (Math.round(entity.state.pos.x,2) <=10) {
+                    console.log("Team B point");       
+                }
+                if (Math.round(entity.state.pos.x,2) >=535) {
+                    console.log("Team A point");
+                }
+            }
+            return true;
+        });
+*/
         View.world.on('step', function(){
             View.world.render();
         });
