@@ -14,7 +14,7 @@ class Countdown {
             that.element.fadeIn(0);
             that.setCountdownName(increment, that.element);
             that.element.fadeOut(that.countdownDuration);
-           // if (increment>0) { //terminating conditions remove to blow test
+           // if (increment>0) { //terminating conditions remove to blow test and what not
                 that.doCount(--increment);
            // }
         },that.countdownDuration);
