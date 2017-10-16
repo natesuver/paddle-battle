@@ -13,8 +13,29 @@ window.onresize = function() {
 
  
 
-var ws = new WebSocket('ws://eeffb195.ngrok.io'); //ws://d08ae3c8.ngrok.io //ws://localhost:8080
-  
+var ws = new WebSocket('wss://paddle-battle-server-dev.us-east-1.elasticbeanstalk.com'); //ws://d08ae3c8.ngrok.io //ws://localhost:8080
+this.send = function (message) {
+    this.waitForConnection(function () {
+        ws.send(message);
+       // if (typeof callback !== 'undefined') {
+       //   callback();
+       // }
+    }, 500);
+};
+
+this.waitForConnection = function (callback, interval) {
+    if (ws.readyState === 1) {
+        callback();
+    } else {
+        var that = this;
+        // optional: implement backoff for interval here
+        setTimeout(function () {
+            console.log("waiting for connection to open..");
+            that.waitForConnection(callback, interval);
+        }, interval);
+    }
+};
+
 ws.onmessage = function (event) {
     var position = parseInt(event.data);
     paddles[1].state.pos.y = position+40;
@@ -106,7 +127,7 @@ function beginGame()
         obj.style.left = touch.pageX + 'px';
         obj.style.top = touch.pageY + 'px';
         paddles[0].state.pos.y = touch.pageY;
-        ws.send(touch.pageY);
+        window.send(touch.pageY);
       }
     }, false);
    /*
