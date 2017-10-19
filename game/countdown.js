@@ -14,9 +14,9 @@ class Countdown {
             that.element.fadeIn(0);
             that.setCountdownName(increment, that.element);
             that.element.fadeOut(that.countdownDuration);
-            if (increment>0) {
+           // if (increment>0) { //recursion is awesome!!!
                 that.doCount(--increment);
-            }
+           /// }
         },that.countdownDuration);
     }
     

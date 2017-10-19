@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>WebSockets Test</title>
+         
+        <script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+        <script>
+        var url ="http://battle-server-dev.us-east-1.elasticbeanstalk.com"
+           // var url = "http://localhost:3000"
+            var socket = io(url);
+
+            socket.on('handshake', function (data) {
+                console.log('news', data);
+            });
+
+            socket.on('loc', function (data) {
+                console.log('location: ', data);
+            });
+
+            function sendTest () {
+                socket.emit('paddlemove', 777);
+            }
+        </script>
+
+    </head>
+    <body>
+        <div>Check Console</div>
+        <button onClick="sendTest()">Send Test</button>
+    </body>
+</html>
