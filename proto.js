@@ -199,9 +199,9 @@ function beginGame()
     
     world.on('collisions:detected', function( data ){
        // var c;
-        if (data.collisions.length>0) {
+       /* if (data.collisions.length>0) {
             recordCollission(data.collisions[ 0 ]);
-        }
+        } */
         //for (var i = 0, l = data.collisions.length; i < l; i++){
         //    c = data.collisions[ i ];
             

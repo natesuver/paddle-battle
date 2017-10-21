@@ -16,7 +16,7 @@ module.exports = function(config) {
     files: [
       'node_modules/**/jquery.min.js',
       'node_modules/**/jasmine-fixture.min.js',
-      'game/countdown.js',
+      'game/board/assets/countdown.js',
       'test/**/*.js'
     ],
     // list of files to exclude
