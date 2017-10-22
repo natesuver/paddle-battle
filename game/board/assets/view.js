@@ -38,6 +38,11 @@ class View { //TODO, this is not a good candidate for a class, rewrite in protot
          View.socket.on('gameOver', function(stateInfo) {
             View.onGameOver(JSON.parse(stateInfo))
          });
+         View.movePaddle = function(playerId, position) {
+            var targetPaddle = View.paddleDictionary["p" + playerId];
+            targetPaddle.paddleBody.state.pos.y = position;
+            View.socket.emit('paddleChange', {l:position,p:playerId});
+         }
      }
 
     initializePhysics() {
@@ -117,8 +122,8 @@ class View { //TODO, this is not a good candidate for a class, rewrite in protot
         }
         View.onGameOver = function(stateInfo) {
             console.log("Game Over: " + JSON.stringify(stateInfo));
-            //TODO: Record final score
-            window.location.href="gameOver.php";
+            //TODO: Record final score, and redirect to game over page
+            //window.location.href="gameOver.php";
         }
         //Arguments: scoreData is a json encoded string e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
         View.onScoreChange = function(scoreData) {

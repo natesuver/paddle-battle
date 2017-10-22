@@ -20,7 +20,7 @@ if (!isset($_SESSION['username'])) {
     </div>
     <div id="gameSurface" style="visible: hidden;">
         <div class="gameTitle"> </div>
-        <div class="touchSurface"> </div>
+        <div id="slider" class="touchSurface"> </div>
         <canvas id="gameBoard" ></canvas>
         <div class="gameStatus"> </div>
     </div>  
