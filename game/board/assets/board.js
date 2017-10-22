@@ -22,6 +22,6 @@ function startGame() {
 }
 
 function startCountdown() {
-    var cd = new Countdown($("#countdown"),1,"Go!", startGame);
+    var cd = new Countdown($("#countdown"),0,"Go!", startGame);
     cd.beginCountdown();
 }
