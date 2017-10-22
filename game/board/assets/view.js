@@ -1,186 +1,151 @@
-class View { //TODO, this is not a good candidate for a class, rewrite in prototype form
-    constructor(boardElement, teamA, teamB, gameId, gameUrl, onConnect) {
-        View.boardElement = boardElement;
-        this.teamAPlayers = teamA; //an array of objects, each object is a player
-        this.teamBPlayers = teamB; //an array of objects, each object is a player
-        View.paddleDictionary={}; //a convenience member to help with extremely fast lookups of paddle bodies
-        this.initializePhysics();
-        this.initializeSocket(gameId,gameUrl);
-        View.onConnect = onConnect;
-        View.ballBody = null;
-        this.addGameAssets();
+var view = function(boardElement, teamA, teamB, gameId, gameUrl, onConnect, onBehavior) {
+    
+    view.initializeSocket = function(gameId, gameUrl) {
+        //note, when the game concludes, the server will terminate the socket, not needed from the client side.
+        //passing in the gameId into the url of the socket allows a single server to handle multiple games.
+        view.socket = io.connect(gameUrl,{ query: "gameId=" + gameId }); 
+        view.socket.on('handshake', function (data) {
+           console.log("Connection Established");
+           view.onConnect();
+        });
+        view.socket.on('stateChange', function (stateInfo) {
+           view.onUpdateState(JSON.parse(stateInfo));
+        });
+        view.socket.on('impact', function (impactInfo) {
+            view.onBehavior("impact",JSON.parse(impactInfo));
+        });
+        view.socket.on('paddleChange', function (paddleInfo) {
+           view.onPaddleChange(JSON.parse(paddleInfo));
+        });
+        view.socket.on('scoreChange', function (scoreData) {
+            //Arguments: scoreData is a json encoded string e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
+            view.onBehavior("score",JSON.parse(scoreData));
+        });
         
+        view.socket.on('gameOver', function(stateInfo) {
+           view.onBehavior("gameover",JSON.parse(stateInfo));
+        });
+        view.movePaddle = function(playerId, position) {
+           var targetPaddle = view.paddleDictionary["p" + playerId];
+           targetPaddle.paddleBody.state.pos.y = position;
+           view.socket.emit('paddleChange', {l:position,p:playerId});
+        }
+      //  view.socket.on('reconnect', (attemptNumber) => {
+            // ...
+        //  });
     }
-   
 
-     initializeSocket(gameId, gameUrl) {
-         //note, when the game concludes, the server will terminate the socket, not needed from the client side.
-         //passing in the gameId into the url of the socket allows a single server to handle multiple games.
-         View.socket = io.connect(gameUrl,{ query: "gameId=" + gameId }); 
-        // var self = this;
-         View.socket.on('handshake', function (data) {
-            console.log("Connection Established");
-            View.onConnect();
-         });
-         View.socket.on('stateChange', function (stateInfo) {
-            View.onUpdateState(JSON.parse(stateInfo));
-         });
-         View.socket.on('impact', function (impactInfo) {
-            View.onImpact(JSON.parse(impactInfo));
-         });
-         View.socket.on('paddleChange', function (paddleInfo) {
-            View.onPaddleChange(JSON.parse(paddleInfo));
-         });
-         View.socket.on('scoreChange', function (scoreData) {
-            View.onScoreChange(JSON.parse(scoreData));
-         });
-         
-         View.socket.on('gameOver', function(stateInfo) {
-            View.onGameOver(JSON.parse(stateInfo))
-         });
-         View.movePaddle = function(playerId, position) {
-            var targetPaddle = View.paddleDictionary["p" + playerId];
-            targetPaddle.paddleBody.state.pos.y = position;
-            View.socket.emit('paddleChange', {l:position,p:playerId});
-         }
-     }
-
-    initializePhysics() {
-        View.paddleColissionQuery= Physics.query({
+    view.initializePhysics = function() {
+        view.paddleColissionQuery= Physics.query({
             $or: [
                 { bodyA: { name: 'circle' } }
                 ,{ bodyB: { name: 'circle' } }
             ]
         });
-        View.world = Physics();
-        var that = this;
+        view.world = Physics();
         var renderer = Physics.renderer("canvas",{
-            el: View.boardElement[0].id,	// canvas element id
-            width: View.boardElement.width(),		// canvas width
-            height: View.boardElement.height(),		// canvas height
+            el: view.boardElement[0].id,	// canvas element id
+            width: view.boardElement.width(),		// canvas width
+            height: view.boardElement.height(),		// canvas height
             meta: false // setting this to "true" will display metrics (frames per second)
         });	
 
-        View.world.add(renderer);    
-        View.world.add( Physics.behavior('sweep-prune') );
-        var bounds = Physics.aabb(0, 0, View.boardElement.width(), View.boardElement.height()); //define the boundaries of our container.
-        View.world.add( Physics.behavior('edge-collision-detection', {
+        view.world.add(renderer);    
+        view.world.add( Physics.behavior('sweep-prune') );
+        var bounds = Physics.aabb(0, 0, view.boardElement.width(), view.boardElement.height()); //define the boundaries of our container.
+        view.world.add( Physics.behavior('edge-collision-detection', {
             aabb: bounds,
             restitution: 1
         }) );
-        View.world.add( Physics.behavior('body-collision-detection') );
-        View.world.add( Physics.behavior('sweep-prune') );
+        view.world.add( Physics.behavior('body-collision-detection') );
+        view.world.add( Physics.behavior('sweep-prune') );
         // ensure objects bounce when edge collision is detected
-        View.world.add( Physics.behavior('body-impulse-response') );
+        view.world.add( Physics.behavior('body-impulse-response') );
     
         Physics.util.ticker.on(function( time, dt ){
-            View.world.step( time );
+            view.world.step( time );
         });
-        View.addBall = function() {
-            var ball = new Ball(View.boardElement.width()/2, View.boardElement.height()/2)
-            View.world.add(ball.body);
-            View.ballBody=ball.body;
-        }
-        View.world.on('collisions:detected', function( data ){
-            var found = Physics.util.find( data.collisions, View.paddleColissionQuery );
+       
+        view.world.on('collisions:detected', function( data ){
+            var found = Physics.util.find( data.collisions, view.paddleColissionQuery );
             if ( found ){
                 var resolveBall = found.bodyA.radius?found.bodyA:found.bodyB;
                     if (resolveBall.state.pos.x<=12) {
-                        View.onWallScore('b');
-                        View.resetBall();
+                        view.onWallScore('b');
+                        view.onBehavior("resetball",view.ballBody);
                     }
                     if (resolveBall.state.pos.x>=538) {
-                        View.onWallScore('a');
-                        View.resetBall();
+                        view.onWallScore('a');
+                        view.onBehavior("resetball",view.ballBody);
                     }
                     //console.log("Strike!");    //TODO: do something with this data.  something nice.  
             }
         });
 
-        View.resetBall = function() {
-            View.ballBody.state.vel.x = 0;
-            View.ballBody.state.vel.y = .5;
-           // View.ballBody.state.acc.y = .5;
-            View.ballBody.radius=50;
-            View.ballBody.styles.fillStyle = 'red';
-            View.ballBody.treatment = 'kinematic';
-            View.ballBody.recalc();
-            View.ballBody.view = undefined; // re-creates new view on next render
-            View.world.render();
-            View.addBall();
-           // View.ballBody.state.pos.y = View.boardElement.height()/2;
-           // View.ballBody.state.pos.x = View.boardElement.width()/2;
-        }
-        View.onWallScore = function(team) {
-            View.socket.emit('score', team);
+        view.onWallScore = function(team) {
+            view.socket.emit('score', team);
         }
       
-        View.onPaddleChange = function(paddleInfo) {
-            var targetPaddle = View.paddleDictionary["p" + paddleInfo.p];
+        view.onPaddleChange = function(paddleInfo) {
+            var targetPaddle = view.paddleDictionary["p" + paddleInfo.p];
             targetPaddle.paddleBody.state.pos.y = paddleInfo.l;
-           // console.log("paddleInfo data: " + JSON.stringify(paddleInfo));
+            view.onBehavior("paddlechange",paddleInfo);
         }
-        View.onGameOver = function(stateInfo) {
-            console.log("Game Over: " + JSON.stringify(stateInfo));
-            //TODO: Record final score, and redirect to game over page
-            //window.location.href="gameOver.php";
-        }
-        //Arguments: scoreData is a json encoded string e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
-        View.onScoreChange = function(scoreData) {
-            console.log("Score is now: " + JSON.stringify(scoreData))
-        }
-        /*
-        Physics.body.mixin('collide', function( entity ){
-            if ( entity.id === "ball"){
-                if (Math.round(entity.state.pos.x,2) <=10) {
-                    console.log("Team B point");       
-                }
-                if (Math.round(entity.state.pos.x,2) >=535) {
-                    console.log("Team A point");
-                }
-            }
-            return true;
-        });
-*/
-        View.world.on('step', function(){
-            View.world.render();
+       
+        view.world.on('step', function(){
+            view.world.render();
         });
         
     }
-    addGameAssets() {
-        this.addPaddles(this.teamAPlayers,this.TeamAStartXPosition);
-        this.addPaddles(this.teamBPlayers,this.TeamBStartXPosition);
-        View.addBall();
+
+    view.addGameAssets = function() {
+        view.addPaddles(view.teamAPlayers,view.TeamAStartXPosition);
+        view.addPaddles(view.teamBPlayers,view.TeamBStartXPosition);
+        view.addBall();
     }
-    addPaddles(players, startPosition) {
+
+    view.addPaddles = function(players, startPosition) {
         var paddle= null;
         var player = null;
         for (var i=0;i<players.length; i++) {
             player =players[i];
             paddle = new Paddle(i, players.length, startPosition, player);
-            View.paddleDictionary["p" + player.id] = paddle; //a dictionary for fast paddle lookup when the socket receives a new position from another player.
-            View.world.add(paddle.body);
+            view.paddleDictionary["p" + player.id] = paddle; //a dictionary for fast paddle lookup when the socket receives a new position from another player.
+            view.world.add(paddle.body);
         }
     }
-    
-    
-    start() {
+
+    view.addBall = function() {
+        var ball = new Ball(view.boardElement.width()/2, view.boardElement.height()/2)
+        view.world.add(ball.body);
+        view.ballBody=ball.body;
+    }
+
+    view.start = function() {
         Physics.util.ticker.start();
     }
+    
+    
+    view.TeamAStartXPosition=10;
+    view.TeamBStartXPosition=540;
 
-    get TeamAStartXPosition() {return 10;}
-    get TeamBStartXPosition() {return 540;}
+    view.boardElement = boardElement;
+    view.teamAPlayers = teamA; //an array of objects, each object is a player
+    view.teamBPlayers = teamB; //an array of objects, each object is a player
+    view.paddleDictionary={}; //a convenience member to help with extremely fast lookups of paddle bodies
+    view.initializePhysics();
+    view.initializeSocket(gameId,gameUrl);
+    view.onConnect = onConnect;
+    view.onBehavior = onBehavior;
+    view.ballBody = null;
+    view.addGameAssets();
+} 
 
-    onUpdateState(stateInfo) {
-        console.log("game state: " + JSON.stringify(stateInfo));
-    }
-    onImpact(impactInfo) {
-        console.log("impact data: " + JSON.stringify(impactInfo));
-    }
 
-    //Summary: This function fires when another player sends a paddleChange message.  When the message is received, move the desired player's paddle to the location specified by the server.
-    //Arguments:  paddleData is a json object e,g. {l:999,p:999}.  l is the location of the paddle on the board, p is the player id.  Both are integers.
+
+  
    
    
+    
+    
    
-}

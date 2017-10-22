@@ -1,4 +1,6 @@
 //node bot.js "http://localhost:3000" 1 1,2,3,4,5,6,7,8,9,10
+//node bot.js http://battle-server-dev.us-east-1.elasticbeanstalk.com 1 2,3,4,5,6,7,8,9,10
+
 var serverUrl = process.argv[2];
 var gameId = parseInt(process.argv[3]);
 var players = process.argv[4].split(",");
@@ -30,7 +32,7 @@ function movePlayer(playerId) {
             lastPosition = 10;
             direction=1;
         }
-    },45);
+    },60);
 }
 
 function getRandomStart() {
