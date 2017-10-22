@@ -1,0 +1,62 @@
+I  copied the three tables below for my reference while writing the code. B-)
+
+servers:  
+server_id (int, pk, auto increment), 
+server_name (varchar), 
+game_started (boolean), 
+game_id (int FK references same column on teams table)
+
+
+teams: 
+game_id (int, pk, auto increment), 
+team (int -- this will just be 1 or 2), 
+user_id (int FK referencing 'id' from users table)
+
+CREATE TABLE Users (
+    ID int NOT NULL AUTO_INCREMENT,
+    LastName varchar(255),
+    FirstName varchar (255),
+	Password int,
+IsLoggedIn bit,
+);
+
+Write SQL query to see if game_started is true or false (if game has started or not)
+
+SELECT * FROM servers WHERE game_started = True;
+
+
+Write SQL query to update when a game has started
+
+UPDATE servers SET game_started = true;
+
+
+Write SQL query to select all users in a game -- will need 
+to join onto Users table for usernames 
+(this is for populating the team views w/ list of joined players).
+
+SELECT *
+FROM Servers
+WHERE game_started = true
+INNER JOIN teams ON server.game_id = teams.game_id
+INNER JOIN users ON teams.user_id = users.user_id;
+
+
+Write SQL query to get a list of servers
+
+SELECT DISTINCT server_id, server_name FROM orders 
+
+
+Write SQL query to update Teams table when somebody picks a side
+
+UPDATE
+servers
+SET
+team = teams.team FROM
+servers
+INNER JOIN
+teams
+ON
+server.match = teams.match
+
+label who started the game, that user becomes the “master user” for the game, 
+they control the game state.  Even just a bit in the games table will suffice
