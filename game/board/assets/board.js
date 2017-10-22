@@ -8,8 +8,12 @@ $(document).ready(function() {
     
     boardCanvas = $("#gameSurface");
     boardCanvas.hide();
-    game = new View($("#gameBoard"), [{"name":"Nate"}, {"name":"Steve"}, {"name":"Lil Billy"}, {"name":"Walde"}, {"name":"Torrit"}], [{"name":"Jenny"}, {"name":"Karen"}, {"name":"Tina"}, {"name":"Jack"}, {"name":"Jammer"}]);
-    startCountdown();
+    //boardElement, teamA, teamB, gameId, gameUrl, onConnect)
+    var teamA = [{"name":"Nate","id": 1}, {"name":"Steve","id": 2}, {"name":"Lil Billy","id": 3}, {"name":"Walde","id": 4}, {"name":"Torrit","id": 5}];
+    var teamB = [{"name":"Jenny","id": 6}, {"name":"Karen","id": 7}, {"name":"Tina","id": 8}, {"name":"Jack","id": 9}, {"name":"Jammer","id": 10}];
+    game = new View($("#gameBoard"), teamA, teamB, 1, "http://localhost:3000",function() {
+        startCountdown();
+    });
 });
 
 function startGame() {
@@ -18,6 +22,6 @@ function startGame() {
 }
 
 function startCountdown() {
-    var cd = new Countdown($("#countdown"),5,"Go!", startGame);
+    var cd = new Countdown($("#countdown"),1,"Go!", startGame);
     cd.beginCountdown();
 }

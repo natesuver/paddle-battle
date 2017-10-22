@@ -9,9 +9,9 @@ class Ball {
             cof: 0.00, //drag coefficient
             styles: {
                 fillStyle: 'black'
-            }
+            },
+            uid: -1
         });
-        //this.ballBody.label = "ball";
     }
 
     get body() {return this.ballBody;}

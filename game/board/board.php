@@ -28,7 +28,7 @@ if (!isset($_SESSION['username'])) {
   
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
     crossorigin="anonymous"></script>
-    <script src="../../node_modules/ReconnectingWebSocket/reconnecting-websocket.min.js"> </script>
+    <script src="../../node_modules/socket.io-client/dist/socket.io.js"> </script>
     <script src="../../node_modules/lodash/lodash.min.js"> </script>
     <script src="assets/view.js"></script>
     <script src="assets/board.js"></script>
