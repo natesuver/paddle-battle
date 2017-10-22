@@ -33,6 +33,6 @@ function startGame() {
 }
 
 function startCountdown() {
-    var cd = new Countdown($("#countdown"),0,"Go!", startGame);
+    var cd = new Countdown($("#countdown"),5,"Go!", startGame);
     cd.beginCountdown();
 }
