@@ -6,8 +6,21 @@ $(document).ready(function(){
 	bindEvents();
 });
 
+function showSpinner()
+{
+	$('#modal').css('display', 'block');
+	$('#fade').css('display', 'block');
+}
+
+function hideSpinner()
+{
+	$('#modal').css('display', 'none');
+	$('#fade').css('display', 'none');
+}
+
 function fillSelectBox()
 {
+	showSpinner();
 	$.ajax({
 		type: "POST",
 		url: "getServers.php",
@@ -24,7 +37,7 @@ function fillSelectBox()
                     .attr("value", game_id)
                     .text(serverName));
 			}
-
+			hideSpinner();
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
@@ -34,6 +47,7 @@ function fillSelectBox()
 
 function populatePlayers()
 {
+	showSpinner();
 	//clear out ordered lists, as server will change
 	$('#1_list').empty();
 	$('#2_list').empty();
@@ -59,7 +73,7 @@ function populatePlayers()
 					$('#2_list').append("<li>"+name+"</li>");
 				}
 			}
-
+			hideSpinner();
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
