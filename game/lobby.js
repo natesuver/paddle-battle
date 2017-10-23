@@ -26,6 +26,7 @@ function fillSelectBox()
 		url: "getServers.php",
 		dataType: 'json',
 		success: function(response){
+			if(response['success'] == true){
 			var arr = response['results'];
 
 			for(var i=0; i < arr.length; i++){
@@ -38,6 +39,9 @@ function fillSelectBox()
                     .text(serverName));
 			}
 			hideSpinner();
+			}else{
+				alert("Something went wrong.  We REALLY suck. =(");	
+			}
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
@@ -60,6 +64,7 @@ function populatePlayers()
 		},
 		dataType: 'json',
 		success: function(response){
+			if(response['success'] == true){
 			var arr = response['results'];
 
 			for(var i=0; i < arr.length; i++){
@@ -74,6 +79,9 @@ function populatePlayers()
 				}
 			}
 			hideSpinner();
+			}else{
+				alert("Something went wrong.  We REALLY suck. =(");
+			}
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
@@ -91,7 +99,13 @@ function joinTeam1()
 			game_id: game_id
 		},
 		success: function(response){
-			populatePlayers();
+			var response = JSON.parse(response);
+			if(response['success'] == true){
+				populatePlayers();
+				showLeaveButton();	
+			}else{
+				alert("Something went wrong.  We REALLY suck. =(");
+			}
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
@@ -109,12 +123,52 @@ function joinTeam2()
 			game_id: game_id
 		},
 		success: function(response){
-			populatePlayers();
+			var response = JSON.parse(response);
+			if(response['success'] == true){
+				populatePlayers();
+				showLeaveButton();	
+			}else{
+				alert("Something went wrong.  We REALLY suck. =(");
+			}
 		},
 		error: function(response){
 			alert("Something went wrong.  We REALLY suck. =(");
 		}
 	});
+}
+
+function leaveTeam()
+{
+	showSpinner();
+	$.ajax({
+		type: "POST",
+		url: "leaveTeam.php",
+		data: {
+			game_id: game_id
+		},
+		dataType: 'json',
+		success: function(response){
+			if(response['success'] == true){
+				populatePlayers();
+				hideLeaveButton();
+			}else{
+				alert("Something went wrong.  We REALLY suck. =(");
+			}
+		},
+		error: function(response){
+			alert("Something went wrong.  We REALLY suck. =(");
+		}
+	});
+}
+
+function showLeaveButton()
+{
+	$('#leaveTeam').show();
+}
+
+function hideLeaveButton()
+{
+	$('#leaveTeam').hide();
 }
 
 function bindEvents()
@@ -133,5 +187,9 @@ function bindEvents()
 	//when player clicks on team 1, join player to team 1
 	$('#Team2').on('click', function(){
 		joinTeam2();
+	});
+
+	$('#leaveTeam').on('click', function(){
+		leaveTeam();
 	});
 }
