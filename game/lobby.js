@@ -1,4 +1,3 @@
-var select = $('select');
 var game_id;
 
 $(document).ready(function(){
@@ -68,10 +67,57 @@ function populatePlayers()
 	});
 }
 
+function joinTeam1()
+{
+	$.ajax({
+		type: "POST",
+		url: "joinTeam.php",
+		data: {
+			team: 1,
+			game_id: game_id
+		},
+		success: function(response){
+			populatePlayers();
+		},
+		error: function(response){
+			alert("Something went wrong.  We REALLY suck. =(");
+		}
+	});
+}
+
+function joinTeam2()
+{
+	$.ajax({
+		type: "POST",
+		url: "joinTeam.php",
+		data: {
+			team: 2,
+			game_id: game_id
+		},
+		success: function(response){
+			populatePlayers();
+		},
+		error: function(response){
+			alert("Something went wrong.  We REALLY suck. =(");
+		}
+	});
+}
+
 function bindEvents()
 {
+	//when server select box changes, populate it with players currently joined to game
 	$('select').on("change", function(){
 		game_id = $('select').find(":selected").attr("value");
 		populatePlayers();
+	});
+
+	//when player clicks on team 1, join player to team 1
+	$('#Team1').on('click', function(){
+		joinTeam1();
+	});
+
+	//when player clicks on team 1, join player to team 1
+	$('#Team2').on('click', function(){
+		joinTeam2();
 	});
 }
