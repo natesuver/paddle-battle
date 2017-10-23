@@ -53,7 +53,6 @@ if(!$res){
 
 	if(mysqli_num_rows($exists) == 1){
 		//if user has already joined a team in this game, UPDATE team
-		echo "he's already on a team";
 		$query = "UPDATE teams set team = '$team' where game_id = '$game_id' and user_id = '$user_id'";
 		$exec = mysqli_query($conn, $query);
 
@@ -68,7 +67,6 @@ if(!$res){
 			exit;
 		}
 	}elseif(mysqli_num_rows($exists) == 0){
-		echo "new team member";
 		//if user has not joined a team in this game, INSERT team
 		$query = "INSERT INTO teams VALUES ('$user_id', '$team', '$game_id')";
 		$exec = mysqli_query($conn, $query);
