@@ -14,19 +14,12 @@ function returnFalse()
 	echo json_encode($response);
 }
 
-/*
-first, get the user id for the user
-*/
 $conn = getConnection();
 
-//$query = "SELECT id from users where username = ".$_SESSION['username'];
-$query = "SELECT id from users where username = 'derf'"; //testing
-$res = mysqli_query($conn, $query);
+$game_id = $_POST['game_id'];
 
-//$game_id = $_POST['game_id'];
-$game_id = 1; //testing
+$query = "SELECT teams.team, users.username from teams join users where teams.user_id = users.id and game_id = '$game_id'";
 
-$query = "SELECT * from teams where game_id = '$game_id'";
 $res = mysqli_query($conn, $query);
 
 if(!$res){
@@ -39,7 +32,7 @@ if(!$res){
 		"success" => true,
 		"results" => $arr
 		);
-	echo $response;
+	echo json_encode($response);
 	exit;
 }
 ?>
