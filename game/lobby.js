@@ -177,6 +177,7 @@ function bindEvents()
 	$('select').on("change", function(){
 		game_id = $('select').find(":selected").attr("value");
 		populatePlayers();
+		$('#Teams').show();
 	});
 
 	//when player clicks on team 1, join player to team 1
