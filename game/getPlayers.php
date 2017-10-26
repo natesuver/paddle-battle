@@ -12,6 +12,7 @@ function returnFalse()
 		"success" => false
 	);
 	echo json_encode($response);
+	$conn->close();
 }
 
 $conn = getConnection();
@@ -33,6 +34,7 @@ if(!$res){
 		"results" => $arr
 		);
 	echo json_encode($response);
+	$conn->close();
 	exit;
 }
 ?>
