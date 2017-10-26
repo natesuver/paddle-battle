@@ -10,11 +10,13 @@
             $conn = getConnection();
             $success = mysqli_query($conn, $update);
             if($success){
+                $conn->close();
                 session_destroy();
                 header( 'Location: ../home/home.php' ); 
                 exit;
             }else{
                 echo "Something went wrong on logout";
+                $conn->close();
                 exit;
             }
         }

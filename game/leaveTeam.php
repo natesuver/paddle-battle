@@ -12,6 +12,7 @@ function returnFalse()
 		"success" => false
 	);
 	echo json_encode($response);
+	$conn->close();
 }
 
 /*
@@ -48,6 +49,7 @@ if(!$res){
 			"success" => true
 		);
 		echo json_encode($response);
+		$conn->close();
 		exit;
 	}
 }
