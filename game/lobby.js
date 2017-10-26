@@ -283,8 +283,8 @@ function hideLeaveButton()
 
 function showStartButton()
 {
-	var list1 = $('#1_list');
-	var list2 = $('#2_list');
+	var list1 = $('#1_list li');
+	var list2 = $('#2_list li');
 
 	if(list1.length > 0 && list2.length > 0){
 		$('#start_button').show();
