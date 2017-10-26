@@ -1,10 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['username'])) {
-	header( 'Location: ../home/home.php' );
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -51,6 +44,10 @@ if (!isset($_SESSION['username'])) {
 
     <div class='row text-center'>
         <button id="leaveTeam">Leave Team</button>
+    </div>
+
+    <div class='row text-center'>
+        <button id="start_button">Start Game!</button>
     </div>
 
     <div id="fade"></div>
