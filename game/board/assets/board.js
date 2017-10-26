@@ -1,20 +1,56 @@
-var boardCanvas;
+var boardCanvas, sockMgr, gameId, playerId, gameView;
+
+document.getElementById('gameSurface').style.visibility = "hidden";
+
+
 $(document).ready(function() { 
     //this stops that "refresh when you swipe down" action from happening
     document.body.addEventListener('touchmove', function(event) {
         event.preventDefault();
       }, false); 
-    
-    boardCanvas = $("#gameSurface");
-    boardCanvas.hide();
-    //boardElement, teamA, teamB, gameId, gameUrl, onConnect)
-    var teamA = [{"name":"Nate","id": 1}, {"name":"Steve","id": 2}, {"name":"Lil Billy","id": 3}, {"name":"Walde","id": 4}, {"name":"Torrit","id": 5}];
-    var teamB = [{"name":"Jenny","id": 6}, {"name":"Karen","id": 7}, {"name":"Tina","id": 8}, {"name":"Jack","id": 9}, {"name":"Jammer","id": 10}];
-    view($("#gameBoard"), teamA, teamB, 1, "http://battle-server-dev.us-east-1.elasticbeanstalk.com",function() { //http://localhost:3000 //http://battle-server-dev.us-east-1.elasticbeanstalk.com
-        startCountdown();
-    }, onBehavior);
-    addListeners();
+
+      let params = (new URL(document.location)).searchParams;
+      gameId = parseInt(params.get("gameId"));
+      playerId = parseInt(params.get("playerId"));
+      getData(gameId);
+      boardCanvas = $("#gameSurface");
+
 });
+
+function getData(game_id) {
+    //use promise chaining to grab data needed to begin game.
+    $.when(
+        $.ajax({
+            type: "POST",
+            url: "../getPlayers.php",
+            data: {
+                game_id: game_id
+            }}),
+            $.ajax({
+                type: "POST",
+                url: "../getServer.php",
+                data: {
+                    game_id: game_id
+                }})
+            )
+        .done(function(players, serverData){
+            var server = JSON.parse(serverData[0]);
+            initBoard(JSON.parse(players[0]), server[0].url);
+           
+        }); 
+}
+
+
+function initBoard(gameData, url) {
+    var teamA = _.filter(gameData,function(o){
+        return o.team==1});
+    var teamB = _.filter(gameData,function(o){
+        return o.team==2});
+    sockMgr = sockManager(url, gameId, onBehavior);
+    gameView = view($("#gameBoard"), teamA, teamB, sockMgr)
+    sockMgr.initializeSocket();
+    addListeners();
+}
 
 //Setup listeners for the paddle position slider.  Supported by both touch and mouse.
 function addListeners() {
@@ -23,28 +59,42 @@ function addListeners() {
       // If there's exactly one finger inside this element
       if (event.targetTouches.length == 1) {
         var touch = event.targetTouches[0];
-        view.movePaddle(1,touch.pageY); //TODO: figure out which player i am.
+        gameView.moveMyPaddle(playerId,touch.pageY); 
       }
     }, false);
     obj.addEventListener('mousemove', function(event) {
-        view.movePaddle(1,event.pageY-40); //TODO: figure out which player i am.
+        gameView.moveMyPaddle(playerId,event.pageY-40); 
     }, false);
 }
 
 function startGame() {
+    document.getElementById('gameSurface').style.visibility = "visible";
     boardCanvas.fadeIn(800);
-    view.start();
-}
-
-function startCountdown() {
-    var cd = new Countdown($("#countdown"),5,"Go!", startGame);
-    cd.beginCountdown();
+    gameView.start();
 }
 
 function onBehavior(name, data) {
     switch (name) {
-        case "resetball": //occurs after a team gets a point.
-            //here is an example something we could do when the ball is reset..
+        case "connect": //occurs on successful handshake with game server
+            var cd = new Countdown($("#countdown"),5,"Go!", startGame);
+            cd.beginCountdown();
+            break;
+        case "resetBall": //occurs after a team gets a point.
+           
+        case "gameOver": //occurs when the server determines the game is over
+            var gameState = data; 
+            console.log("Game Over: " + JSON.stringify(gameState));
+            //TODO: record game score.
+            window.location.href="gameOver.php";
+            break;
+        case "paddleChange": //occurs when another player changes their paddle position (not your own)
+            var paddleData = data; //paddleData is a json object e.g. {'l':0,'p':0 }.  'l' is the location (Y coordinate) of the paddle, 'p' is the player id
+            gameView.moveOtherPaddle(paddleData.p,paddleData.l);
+            break;
+        case "score": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
+            var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
+            console.log("Score is now: " + JSON.stringify(scoreData))
+             //here is an example something we could do when the ball is reset..
             //change the balls's color to red, and move it off the screen, and create a new ball.
             var ballBody = data; //ballBody is a reference to the ball body from physicsJS
             ballBody.state.vel.x = 0;
@@ -53,21 +103,9 @@ function onBehavior(name, data) {
             ballBody.treatment = 'kinematic';
             ballBody.recalc();
             ballBody.view = undefined; // re-creates new view on next render
-            view.world.render();
-            view.addBall();
+            gameView.world.render();
+            gameView.addBall();
             break;
-        case "gameover": //occurs when the server determines the game is over
-            var gameState = data; 
-            console.log("Game Over: " + JSON.stringify(gameState));
-            //TODO: record game score.
-            window.location.href="gameOver.php";
-            break;
-        case "paddlechange": //occurs when another player changes their paddle position (not your own)
-            var paddleData = data; //paddleData is a json object e.g. {'l':0,'p':0 }.  'l' is the location (Y coordinate) of the paddle, 'p' is the player id
-            break;
-        case "score": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
-            var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
-            console.log("Score is now: " + JSON.stringify(scoreData))
         case "impact": //occurs whenever the ball hits something, either a paddle, or any of the walls.  This action should update game state for all players.
             var gameState = data;
         break;

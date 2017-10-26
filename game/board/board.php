@@ -30,6 +30,7 @@ if (!isset($_SESSION['username'])) {
     crossorigin="anonymous"></script>
     <script src="../../node_modules/socket.io-client/dist/socket.io.js"> </script>
     <script src="../../node_modules/lodash/lodash.min.js"> </script>
+    <script src="assets/sockManager.js"></script>
     <script src="assets/view.js"></script>
     <script src="assets/board.js"></script>
     <script src="assets/countdown.js"></script>
