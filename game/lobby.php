@@ -1,3 +1,12 @@
+<?php
+require '../common/database.php';
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header( 'Location: ../home/home.php' ); //user is already logged in, go right to lobby.
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -43,17 +52,21 @@
     </div>
 
     <div class='row text-center'>
-        <button id="leaveTeam">Leave Team</button>
+        <button class="btn btn-default" id="leaveTeam">Leave Team</button>
     </div>
 
     <div class='row text-center'>
-        <button id="start_button">Start Game!</button>
+        <button class="btn btn-default" id="start_button">Start Game!</button>
     </div>
 
     <div id="fade"></div>
     <div id="modal">
         <img id="loader" src="../common/loading.gif" />
     </div>
+
+    <input id="user" type="hidden" value="<?php echo $_SESSION['username']; ?>"/>
+
+    <button class="btn btn-default" id="logout">Log Out</button>
 </body>
 </html>
 
