@@ -7,7 +7,6 @@ function returnFalse()
 		"success" => false
 	);
 	echo json_encode($response);
-	$conn->close();
 }
 
 $conn = getConnection();
@@ -20,6 +19,8 @@ $res = mysqli_query($conn, $query);
 
 if(!$res){
 	returnFalse();
+	$res->close();
+	$conn->close();
 	exit;
 }else{
 	$arr = mysqli_fetch_all($res);
@@ -29,6 +30,7 @@ if(!$res){
 		"results" => $arr
 		);
 	echo json_encode($response);
+	$res->close();
 	$conn->close();
 	exit;
 }
