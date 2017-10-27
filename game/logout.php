@@ -12,7 +12,7 @@
             if($success){
                 $conn->close();
                 session_destroy();
-                header( 'Location: ../home/home.php' ); 
+                echo 'success';
                 exit;
             }else{
                 echo "Something went wrong on logout";
