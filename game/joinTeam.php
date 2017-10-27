@@ -2,9 +2,6 @@
 require '../common/database.php';
 
 session_start();
-if (isset($_SESSION['username'])) {
-	header( 'Location: ../game/lobby.php' ); //user is already logged in, go right to lobby.
-}
 
 function returnFalse()
 {
@@ -12,7 +9,6 @@ function returnFalse()
 		"success" => false
 	);
 	echo json_encode($response);
-	$conn->close();
 }
 
 /*
@@ -28,6 +24,7 @@ $res = mysqli_query($conn, $query);
 
 if(!$res){
 	returnFalse();
+	$conn->close();
 	exit;
 }else{
 	$user_id = '';
@@ -49,6 +46,7 @@ if(!$res){
 	//if query doesn't go through, exit
 	if(!$exists){
 		returnFalse();
+		$conn->close();
 		exit;
 	}
 
@@ -65,6 +63,7 @@ if(!$res){
 			exit;
 		}else{
 			returnFalse();
+			$conn->close();
 			exit;
 		}
 	}elseif(mysqli_num_rows($exists) == 0){
@@ -81,11 +80,13 @@ if(!$res){
 			exit;
 		}else{
 			returnFalse();
+			$conn->close();
 			exit;
 		}
 	}else{
 		//if num_rows is not 0 or 1, exit, something went wrong
 		returnFalse();
+		$conn->close();
 		exit;
 	}
 }
