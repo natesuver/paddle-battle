@@ -2,6 +2,7 @@ var game_id;
 var first_load;
 var pollingInterval;
 var username = $('#user').val();
+var userid = $('#userid').val();
 var sockets = [];
 
 $(document).ready(function(){
@@ -36,13 +37,13 @@ function fillSelectBox()
 			for(var i=0; i < arr.length; i++){
 				var item = arr[i];
 				var serverName = item[1];
-				var game_id = item[3];
+				var id = item[3];
 				var serverUrl =  item[2];
-				sockets.push(new sockManager(serverName, serverUrl, game_id,onBehavior ));
+				sockets.push(new sockManager(serverName, serverUrl, id,onBehavior ));
 				$('select').append($("<option></option>")
-					.attr("value", game_id)
+					.attr("value", id)
 					.attr("disabled", true)
-					.attr("id", "game" + game_id)
+					.attr("id", "game" + id)
 					.attr("style","color:red")
                     .text(serverName));
 			}
@@ -259,6 +260,28 @@ function leaveTeam()
 	});
 }
 
+function setMasterUser()
+{
+	stopPolling();
+	showSpinner();
+	$.ajax({
+		type: "POST",
+		url: "setMasterUser.php",
+		data: {
+			game_id: game_id
+		},
+		dataType: 'json',
+		success: function(response){
+			if(response['success'] == true){
+				startGame();
+			}
+		},
+		error: function(response){
+			updateFeedback('Something went wrong', 'red');
+		}
+	});
+}
+
 function leaveButton()
 {
 	if(userIsInGame()){
@@ -302,13 +325,18 @@ function startButton()
 	var list1 = $('#1_list li');
 	var list2 = $('#2_list li');
 
-	if(list1.length > 0 && list2.length > 0 && userIsInGame() && isSocketOpen(game_id)){
+	if(list1.length > 0 && list2.length > 0 && userIsInGame() && isServerAvailable(game_id)){
 		$('#start_button').show();
 	}else{
 		$('#start_button').hide();
 	}
 }
 
+function startGame() {
+	var socket = getSelectedSocket(game_id);
+	socket.startGame();
+	window.location.href="board/board.php?gameId=" + game_id + "&playerId=" + userid;
+}
 function startPolling()
 {
 	pollingInterval = setInterval(pollForPlayers, 3000);
@@ -366,6 +394,12 @@ function bindEvents()
 		stopPolling();
 		logout();
 	});
+	$('#start_button').on('click', function(){
+		setMasterUser();
+	});
+	
+
+
 	window.addEventListener('unload', function(event) {
 		for (var i = 0; i<sockets.length;i++) {
 			sockets[i].closeSocket();
@@ -374,11 +408,17 @@ function bindEvents()
 	$('#displayUser').html("<b>Welcome " + username + "!</b>");
 }
 
-function isSocketOpen(gameId) {
+function isServerAvailable(gameId) {
+	var socket = getSelectedSocket(gameId);
+	return socket.connected && !socket.state.started;
+}
+
+function getSelectedSocket(gameId) {
 	var socket = _.filter(sockets,function(o){
 		return o.gameId==gameId});
-	return socket[0].connected;
+	return socket[0]; //lodash returns an array, grab the first element.
 }
+
 function onBehavior(name, data) {
 	var id = data.gameId;
 	switch (name ) {
@@ -391,6 +431,12 @@ function onBehavior(name, data) {
 			$("#game" + id).attr("disabled",true);
 			$("#game" + id).attr("style","color:red");
 			console.log("Connection released for game " + id);
+			break;
+		case "stateChange":
+			if (data.started && game_id==data.gameId) {
+				window.location.href="board/board.php?gameId=" + game_id + "&playerId=" + userid;
+			}
+
 			break;
 	}
 }

@@ -25,6 +25,7 @@ if(mysqli_num_rows($res) != 1){
 }else{
 	$row = $res->fetch_row();
 	$savedPw = $row[2];
+	$userId = $row[0];
 }
 
 if(password_verify($pw,$savedPw)) { 
@@ -36,6 +37,7 @@ if(password_verify($pw,$savedPw)) {
 			"feedback"=>"Logged in!"
 			);
 		$_SESSION['username'] = $user;
+		$_SESSION['userid'] = $userId;
 		cleanupDBResources($conn,$res);
 		echo json_encode($data);
 		exit;

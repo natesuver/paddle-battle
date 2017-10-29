@@ -5,14 +5,17 @@ class sockManager {
         this.gameId = gameId;
         this.onBehavior = onBehavior;
         this.socket = io.connect(gameUrl,{ query: "gameId=" + gameId }); 
+        this.gameState = {started: false};
         var self = this;
         this.socket.on('handshake', function (data) {
             console.log("Connection Established");
+            self.gameState = JSON.parse(data);
             self.socket.on('disconnect', function () {
                 self.onBehavior("disconnect", {gameId:self.gameId});
             });
             self.socket.on('stateChange', function (stateInfo) {
-                self.onBehavior("stateChange", JSON.parse(stateInfo));
+                self.gameState = JSON.parse(stateInfo);
+                self.onBehavior("stateChange", self.gameState);
             });
             self.socket.on('impact', function (impactInfo) {
                 self.onBehavior("impact",JSON.parse(impactInfo));
@@ -28,7 +31,7 @@ class sockManager {
             self.socket.on('gameOver', function(stateInfo) {
                 self.onBehavior("gameOver",JSON.parse(stateInfo));
             });
-            self.onBehavior("connect", {gameId:self.gameId});
+            self.onBehavior("connect", JSON.parse(data));
         });
        
     }
@@ -43,8 +46,14 @@ class sockManager {
     closeSocket() {
         this.socket.disconnect();
     }
+    startGame() {
+        this.socket.emit('gameStarted', null);
+    }
     get connected() {
         return this.socket.connected;
+    }
+    get state() {
+        return this.gameState;
     }
 
 }

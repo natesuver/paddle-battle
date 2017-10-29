@@ -61,6 +61,7 @@ if (!isset($_SESSION['username'])) {
     </div>
 
     <input id="user" type="hidden" value="<?php echo $_SESSION['username']; ?>"/>
+    <input id="userid" type="hidden" value="<?php echo $_SESSION['userid']; ?>"/>
 
     <button class="btn btn-default" id="logout">Log Out</button>
     <div id="displayUser"></div>

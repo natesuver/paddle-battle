@@ -47,7 +47,7 @@ function initBoard(gameData, url, serverName) {
     var teamB = _.filter(gameData,function(o){
         return o.team==2});
     sockMgr = new sockManager(serverName,url, gameId, onBehavior);
-    gameView = view($("#gameBoard"), teamA, teamB, sockMgr)
+    gameView = view($("#gameBoard"), teamA, teamB, sockMgr);
     addListeners();
 }
 
