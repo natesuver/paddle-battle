@@ -1,6 +1,7 @@
 var game_id;
 var first_load;
 var pollingInterval;
+var username = $('#user').val();
 
 $(document).ready(function(){
 	first_load = true;
@@ -42,12 +43,7 @@ function fillSelectBox()
                     .text(serverName));
 			}
 			hideSpinner();
-			}else{
-				alert("Something went wrong.  We REALLY suck. =(");	
 			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
 		}
 	});
 }
@@ -84,16 +80,11 @@ function populatePlayers()
 				}else if(team == 2){
 					$('#2_list').append("<li>"+name+"</li>");
 				}
-
-				showStartButton();
-				hideSpinner();
 			}
-		}else{
-				alert("Something went wrong.  We REALLY suck. =(");
+			startButton();
+			leaveButton();
+			hideSpinner();
 			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
 		}
 	});
 }
@@ -102,66 +93,64 @@ function pollForPlayers()
 {
 	$.ajax({
 		type: "POST",
-		url: "getPlayers.php",
+		url: "pollPlayers.php",
 		data: {
 			game_id: game_id
 		},
 		dataType: 'json',
 		success: function(response){
 			if(response['success'] == true){
-			var arr = response['results'];
-			var polledNames1 = [];
-			var polledNames2 = [];
-			var team1Names = [];
-			var team2Names = [];
+				var arr = response['results'];
+				var polledNames1 = [];
+				var polledNames2 = [];
+				var team1Names = [];
+				var team2Names = [];
 
-			//here, we're getting the names of each player pulled in from php and adding them to respective arrays
-			for(var i=0; i < arr.length; i++){
-				var item = arr[i];
-				var team = item[0];
-				var name = item[1];
+				//here, we're getting the names of each player pulled in from php and adding them to respective arrays
+				for(var i=0; i < arr.length; i++){
+					var item = arr[i];
+					var team = item[0];
+					var name = item[1];
 
-				if(team == 1){
-					polledNames1.push(name);
-				}else if(team == 2){
-					polledNames2.push(name);
+					if(team == 1){
+						polledNames1.push(name);
+					}else if(team == 2){
+						polledNames2.push(name);
+					}
 				}
-			}
 
-			//now we grab the actual names that are currently in the <ol>s and turn them into arrays
-			$('#1_list li').each(function(i, elem) {
-    			team1Names.push($(elem).text());
-			});
+				//now we grab the actual names that are currently in the <ol>s and turn them into arrays
+				$('#1_list li').each(function(i, elem) {
+    				team1Names.push($(elem).text());
+				});
 
-			$('#2_list li').each(function(i, elem) {
-    			team2Names.push($(elem).text());
-			});
+				$('#2_list li').each(function(i, elem) {
+    				team2Names.push($(elem).text());
+				});
 
-			//if there's any differences in the team1 array, re-populate team 1 list
-			var team1comp = compareNames(team1Names, polledNames1);
-			if(!team1comp){
-				$('#1_list').empty();
-				for(var i=0; i < polledNames1.length; i++){
-					var item = polledNames1[i];
-					$('#1_list').append("<li>"+item+"</li>");
+				//if there's any differences in the team1 array, re-populate team 1 list
+				var team1comp = compareNames(team1Names, polledNames1);
+				if(!team1comp){
+					$('#1_list').empty();
+					for(var i=0; i < polledNames1.length; i++){
+						var item = polledNames1[i];
+						$('#1_list').append("<li>"+item+"</li>");
+					}
 				}
-			}
 
-			var team2comp = compareNames(team2Names, polledNames2);
-			//if there's any differences in the team2 array, re-populate team 2 list
-			if(!team2comp){
-				$('#2_list').empty();
-				for(var i=0; i < polledNames2.length; i++){
-					var item = polledNames2[i];
-					$('#2_list').append("<li>"+item+"</li>");
+				var team2comp = compareNames(team2Names, polledNames2);
+				//if there's any differences in the team2 array, re-populate team 2 list
+				if(!team2comp){
+					$('#2_list').empty();
+					for(var i=0; i < polledNames2.length; i++){
+						var item = polledNames2[i];
+						$('#2_list').append("<li>"+item+"</li>");
+					}
 				}
+
+				leaveButton();
+				startButton();
 			}
-		}else{
-				alert("Something went wrong.  We REALLY suck. =(");
-			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
 		}
 	});
 }
@@ -191,63 +180,63 @@ function compareNames(displayed_names, polled_names)
 
 function joinTeam1()
 {
-	stopPolling();
-	showSpinner();
-	$.ajax({
-		type: "POST",
-		url: "joinTeam.php",
-		data: {
-			team: 1,
-			game_id: game_id
-		},
-		success: function(response){
-			var response = JSON.parse(response);
-			if(response['success'] == true){
-				populatePlayers();
-				showLeaveButton();
-				hideSpinner();
-				startPolling();
-			}else{
-				alert("Something went wrong.  We REALLY suck. =(");
+	var list1 = $('#1_list li');
+	if(list1.length > 4){
+		alert("Only 5 players per side allowed!");
+	}else{
+		showSpinner();
+
+		$.ajax({
+			type: "POST",
+			url: "joinTeam.php",
+			data: {
+				team: 1,
+				game_id: game_id
+			},
+			success: function(response){
+				var response = JSON.parse(response);
+				if(response['success'] == true){
+					populatePlayers();
+					showLeaveButton();
+					hideSpinner();
+					setTimeout(startPolling, 2000);
+				}
 			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
-		}
-	});
+		});
+	}
 }
 
 function joinTeam2()
 {
-	stopPolling();
-	showSpinner();
-	$.ajax({
-		type: "POST",
-		url: "joinTeam.php",
-		data: {
-			team: 2,
-			game_id: game_id
-		},
-		success: function(response){
-			var response = JSON.parse(response);
-			if(response['success'] == true){
-				populatePlayers();
-				showLeaveButton();
-				hideSpinner();
-				startPolling();
-			}else{
-				alert("Something went wrong.  We REALLY suck. =(");
+	var list2 = $('#2_list li');
+
+	if(list2.length > 4){
+		alert("Only 5 players per side allowed!");
+	}else{
+		showSpinner();
+
+		$.ajax({
+			type: "POST",
+			url: "joinTeam.php",
+			data: {
+				team: 2,
+				game_id: game_id
+			},
+			success: function(response){
+				var response = JSON.parse(response);
+				if(response['success'] == true){
+					populatePlayers();
+					showLeaveButton();
+					hideSpinner();
+					setTimeout(startPolling, 2000);
+				}
 			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
-		}
-	});
+		});
+	}
 }
 
 function leaveTeam()
 {
-	stopPolling();
 	showSpinner();
 	$.ajax({
 		type: "POST",
@@ -260,15 +249,19 @@ function leaveTeam()
 			if(response['success'] == true){
 				populatePlayers();
 				hideLeaveButton();
-				startPolling();
-			}else{
-				alert("Something went wrong.  We REALLY suck. =(");
+				setTimeout(startPolling, 2000);
 			}
-		},
-		error: function(response){
-			alert("Something went wrong.  We REALLY suck. =(");
 		}
 	});
+}
+
+function leaveButton()
+{
+	if(userIsInGame()){
+		showLeaveButton();
+	}else{
+		hideLeaveButton();
+	}
 }
 
 function showLeaveButton()
@@ -279,14 +272,33 @@ function showLeaveButton()
 function hideLeaveButton()
 {
 	$('#leaveTeam').hide();
+	$('#leaveTeam').attr('display', 'none');
 }
 
-function showStartButton()
+function userIsInGame()
+{
+	var result = false;
+	$('#1_list li').each(function(i, elem) {
+    	if($(elem).text() === username){
+    		result =  true;
+    	}
+	});
+
+	$('#2_list li').each(function(i, elem) {
+    	if($(elem).text() === username){
+    		result =  true;
+    	}
+	});
+
+	return result;
+}
+
+function startButton()
 {
 	var list1 = $('#1_list li');
 	var list2 = $('#2_list li');
 
-	if(list1.length > 0 && list2.length > 0){
+	if(list1.length > 0 && list2.length > 0 && userIsInGame()){
 		$('#start_button').show();
 	}else{
 		$('#start_button').hide();
@@ -301,7 +313,19 @@ function startPolling()
 function stopPolling()
 {
 	clearInterval(pollingInterval);
-	console.log(pollingInterval);
+}
+
+function logout()
+{
+	showSpinner();
+	$.ajax({
+		type: "POST",
+		url: "logout.php",
+		success: function(response){
+			hideSpinner();
+			window.location = '../home/home.php';
+		}
+	});
 }
 
 function bindEvents()
@@ -309,24 +333,33 @@ function bindEvents()
 	//when server select box changes, populate it with players currently joined to game
 	$('select').on("change", function(){
 		stopPolling();
+		showSpinner();
 		game_id = $('select').find(":selected").attr("value");
 		populatePlayers();
 
-		startPolling();
+		setTimeout(startPolling, 2000);
 		$('#Teams').show();
 	});
 
 	//when player clicks on team 1, join player to team 1
 	$('#Team1').on('click', function(){
+		stopPolling();
 		joinTeam1();
 	});
 
 	//when player clicks on team 1, join player to team 1
 	$('#Team2').on('click', function(){
+		stopPolling();
 		joinTeam2();
 	});
 
 	$('#leaveTeam').on('click', function(){
+		stopPolling();
 		leaveTeam();
+	});
+
+	$('#logout').on('click', function(){
+		stopPolling();
+		logout();
 	});
 }
