@@ -19,6 +19,7 @@ if(mysqli_num_rows($res) != 1){
 		"isValid"=> false,
 		"feedback"=> "User not found."
 		);
+		cleanupDBResources($conn,$res);
 	echo json_encode($data);
 	exit;
 }else{
@@ -35,6 +36,7 @@ if(password_verify($pw,$savedPw)) {
 			"feedback"=>"Logged in!"
 			);
 		$_SESSION['username'] = $user;
+		cleanupDBResources($conn,$res);
 		echo json_encode($data);
 		exit;
 	}else{
@@ -42,6 +44,7 @@ if(password_verify($pw,$savedPw)) {
 			"isValid"=> false,
 			"feedback"=>"Something went wrong."
 			);
+		cleanupDBResources($conn,$res);
 		echo json_encode($data);
 		exit;
 	}
@@ -50,7 +53,8 @@ if(password_verify($pw,$savedPw)) {
 		"isValid"=> false,
 		"feedback"=> "Incorrect password."
 		);
-	echo json_encode($data);
+		cleanupDBResources($conn,$res);
+		echo json_encode($data);
 	exit;
 }
 

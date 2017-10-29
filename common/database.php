@@ -15,4 +15,8 @@ function execResults($sql) {
     return $data;
 }
 
+function cleanupDBResources($conn, $res) {
+    $conn->close();
+    $res->close();
+}
 ?>

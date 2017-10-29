@@ -2,11 +2,11 @@ var game_id;
 var first_load;
 var pollingInterval;
 var username = $('#user').val();
+var sockets = [];
 
 $(document).ready(function(){
 	first_load = true;
 	fillSelectBox();
-
 	bindEvents();
 });
 
@@ -37,9 +37,13 @@ function fillSelectBox()
 				var item = arr[i];
 				var serverName = item[1];
 				var game_id = item[3];
-
+				var serverUrl =  item[2];
+				sockets.push(new sockManager(serverName, serverUrl, game_id,onBehavior ));
 				$('select').append($("<option></option>")
-                    .attr("value", game_id)
+					.attr("value", game_id)
+					.attr("disabled", true)
+					.attr("id", "game" + game_id)
+					.attr("style","color:red")
                     .text(serverName));
 			}
 			hideSpinner();
@@ -298,7 +302,7 @@ function startButton()
 	var list1 = $('#1_list li');
 	var list2 = $('#2_list li');
 
-	if(list1.length > 0 && list2.length > 0 && userIsInGame()){
+	if(list1.length > 0 && list2.length > 0 && userIsInGame() && isSocketOpen(game_id)){
 		$('#start_button').show();
 	}else{
 		$('#start_button').hide();
@@ -362,4 +366,32 @@ function bindEvents()
 		stopPolling();
 		logout();
 	});
+	window.addEventListener('unload', function(event) {
+		for (var i = 0; i<sockets.length;i++) {
+			sockets[i].closeSocket();
+		}	
+	});
+	$('#displayUser').html("<b>Welcome " + username + "!</b>");
 }
+
+function isSocketOpen(gameId) {
+	var socket = _.filter(sockets,function(o){
+		return o.gameId==gameId});
+	return socket[0].connected;
+}
+function onBehavior(name, data) {
+	var id = data.gameId;
+	switch (name ) {
+		case "connect":
+			$("#game" + id).attr("disabled",false);
+			$("#game" + id).attr("style","color:green");
+			console.log("Connection established for game " + id);
+			break;
+		case "disconnect":
+			$("#game" + id).attr("disabled",true);
+			$("#game" + id).attr("style","color:red");
+			console.log("Connection released for game " + id);
+			break;
+	}
+}
+

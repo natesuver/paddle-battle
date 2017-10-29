@@ -63,9 +63,13 @@ if (!isset($_SESSION['username'])) {
     <input id="user" type="hidden" value="<?php echo $_SESSION['username']; ?>"/>
 
     <button class="btn btn-default" id="logout">Log Out</button>
+    <div id="displayUser"></div>
 </body>
 </html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="../node_modules/socket.io-client/dist/socket.io.js"> </script>
+<script src="../node_modules/lodash/lodash.min.js"> </script>
 <script src="lobby.js"></script>
+<script src="board/assets/sockManager.js"></script>

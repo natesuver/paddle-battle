@@ -112,6 +112,14 @@ body{
     right: 0;
 }
 
+#displayUser{
+    background: black;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 button:hover{
     background: white !important;
     color: black !important;
