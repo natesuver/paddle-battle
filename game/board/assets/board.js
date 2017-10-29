@@ -22,7 +22,7 @@ function getData(game_id) {
     $.when(
         $.ajax({
             type: "POST",
-            url: "../getPlayers.php",
+            url: "../getTeams.php",
             data: {
                 game_id: game_id
             }}),
@@ -35,20 +35,19 @@ function getData(game_id) {
             )
         .done(function(players, serverData){
             var server = JSON.parse(serverData[0]);
-            initBoard(JSON.parse(players[0]), server[0].url);
+            initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
            
         }); 
 }
 
 
-function initBoard(gameData, url) {
+function initBoard(gameData, url, serverName) {
     var teamA = _.filter(gameData,function(o){
         return o.team==1});
     var teamB = _.filter(gameData,function(o){
         return o.team==2});
-    sockMgr = sockManager(url, gameId, onBehavior);
+    sockMgr = new sockManager(serverName,url, gameId, onBehavior);
     gameView = view($("#gameBoard"), teamA, teamB, sockMgr)
-    sockMgr.initializeSocket();
     addListeners();
 }
 
@@ -69,7 +68,6 @@ function addListeners() {
 
 function startGame() {
     document.getElementById('gameSurface').style.visibility = "visible";
-    boardCanvas.fadeIn(800);
     gameView.start();
 }
 
@@ -91,12 +89,17 @@ function onBehavior(name, data) {
             var paddleData = data; //paddleData is a json object e.g. {'l':0,'p':0 }.  'l' is the location (Y coordinate) of the paddle, 'p' is the player id
             gameView.moveOtherPaddle(paddleData.p,paddleData.l);
             break;
-        case "score": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
-            var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
-            console.log("Score is now: " + JSON.stringify(scoreData))
+        case "stateChange":
+            var state = data; //var gameState={score: {'a':0,'b':0 },players:[], started:false};
+            $("#Status").text = "Team A: " + state.score.a + " Team B: " + state.score.b;
+            break;
+        case "swapBall": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
+           // var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
+           // console.log("Score is now: " + JSON.stringify(scoreData))
+           // $("#Status").text = "Team A: " + scoreData.a + " Team B: " + scoreData.b;
              //here is an example something we could do when the ball is reset..
             //change the balls's color to red, and move it off the screen, and create a new ball.
-            var ballBody = data; //ballBody is a reference to the ball body from physicsJS
+            var ballBody = gameView.ballBody; //ballBody is a reference to the ball body from physicsJS
             ballBody.state.vel.x = 0;
             ballBody.state.vel.y = .5;
             ballBody.styles.fillStyle = 'red';

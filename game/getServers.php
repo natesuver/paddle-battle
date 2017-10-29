@@ -1,11 +1,6 @@
 <?php
 require '../common/database.php';
 
-session_start();
-if (isset($_SESSION['username'])) {
-	header( 'Location: ../game/lobby.php' ); //user is already logged in, go right to lobby.
-}
-
 function returnFalse()
 {
 	$response = array(

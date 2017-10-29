@@ -1,5 +1,4 @@
 var view = function(boardElement, teamA, teamB, sockMgr) {
-    
     view.sockMgr = sockMgr;
     view.moveMyPaddle = function(playerId, position) {
         var targetPaddle = view.paddleDictionary["p" + playerId];
@@ -80,7 +79,6 @@ var view = function(boardElement, teamA, teamB, sockMgr) {
     view.start = function() {
         Physics.util.ticker.start();
     }
-    
     
     view.TeamAStartXPosition=10;
     view.TeamBStartXPosition=540;

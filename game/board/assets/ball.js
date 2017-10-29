@@ -11,7 +11,10 @@ class Ball {
                 fillStyle: 'black'
             }
         });
+        this.collisions = 0;
     }
 
     get body() {return this.ballBody;}
+    get collisions() {return this.collisions;}
+    addCollision() {this.collisions++;}
 }

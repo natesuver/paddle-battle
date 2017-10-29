@@ -25,5 +25,6 @@ class Paddle{
     
     get body() { return this.paddleBody;}
     get hits() {return this.hitCount;}
+    addHit() { this.hitCount++;}
     get player() {return this.currentPlayer;}
 }

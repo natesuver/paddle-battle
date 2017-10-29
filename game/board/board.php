@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-	header( 'Location: ../../home/home.php' );
+	header( 'Location: ../home/home.php' );
 }
 ?>
 <html>
@@ -22,7 +22,7 @@ if (!isset($_SESSION['username'])) {
         <div class="gameTitle"> </div>
         <div id="slider" class="touchSurface"> </div>
         <canvas id="gameBoard" ></canvas>
-        <div class="gameStatus"> </div>
+        <div id="status" class="gameStatus"> </div>
     </div>  
       <script src="http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/physicsjs-0.6.0/physicsjs-full-0.6.0.min.js"></script>
   
