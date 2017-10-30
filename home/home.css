@@ -20,9 +20,6 @@
     color: white;
 }
 
-h1, h3 {
-    animation: pulse linear 1.5s;
-}
 h3 {
     font-family: 'OCR A'; 
     font-size: 30px; 
