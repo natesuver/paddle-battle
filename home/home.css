@@ -101,6 +101,12 @@ body {
     border-radius: 50%;
 }
 
+#login_button{
+    background: black;
+    color: white;
+    border: 1px white dashed;
+}
+
 @keyframes l_paddle{
     0% {top: 0%;}
     10% {top: 60%;}
