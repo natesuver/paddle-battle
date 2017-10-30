@@ -15,6 +15,17 @@ function execResults($sql) {
     return $data;
 }
 
+function getSingleResult($sql) {
+    $conn = getConnection();
+    $result = $conn->query($sql);
+    if (!$result) {
+        throw new Exception("Database Error [{$conn->errno}] {$conn->error}");
+    }
+    $data = $result->fetch_assoc();
+    $conn->close();
+    return $data;
+}
+
 function cleanupDBResources($conn, $res) {
     $conn->close();
     $res->close();

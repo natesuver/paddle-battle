@@ -3,13 +3,13 @@ var cPword = '';
 var username = '';
 
 //set submit button to disabled to start
-$('#submit_button').prop('disabled', true);
+$('#login_button').prop('disabled', true);
 
 $('input').keyup(function(){
 	verifyForm();
 });
 
-$('#submit_button').click(function(){
+$('#login_button').click(function(){
 	submit();
 });
 
@@ -32,12 +32,12 @@ function verifyForm(){
 	if(pword && cPword && username){
 		var passwordsMatch = checkPasswords();
 		if(passwordsMatch){
-			$('#submit_button').prop('disabled', false);
+			$('#login_button').prop('disabled', false);
 		}else{
-			$('#submit_button').prop('disabled', true);
+			$('#login_button').prop('disabled', true);
 		}
 	}else{
-		$('#submit_button').prop('disabled', true);
+		$('#login_button').prop('disabled', true);
 	}
 }
 

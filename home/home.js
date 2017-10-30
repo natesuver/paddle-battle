@@ -1,4 +1,4 @@
-$('#submit_button').click(function(){
+$('#login_button').click(function(){
 	submit();
 });
 

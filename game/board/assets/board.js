@@ -1,4 +1,4 @@
-var boardCanvas, sockMgr, gameId, playerId, gameView;
+var boardCanvas, sockMgr, gameId, playerId, gameView, isMasterUser;
 
 document.getElementById('gameSurface').style.visibility = "hidden";
 
@@ -35,19 +35,19 @@ function getData(game_id) {
             )
         .done(function(players, serverData){
             var server = JSON.parse(serverData[0]);
-            initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
-           
+            isMasterUser = (playerId==server[0].master_user);
+            initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name,isMasterUser);
         }); 
 }
 
 
-function initBoard(gameData, url, serverName) {
+function initBoard(gameData, url, serverName, isMasterUser) {
     var teamA = _.filter(gameData,function(o){
         return o.team==1});
     var teamB = _.filter(gameData,function(o){
         return o.team==2});
     sockMgr = new sockManager(serverName,url, gameId, onBehavior);
-    gameView = view($("#gameBoard"), teamA, teamB, sockMgr);
+    gameView = view($("#gameBoard"), teamA, teamB, sockMgr, isMasterUser);
     addListeners();
 }
 

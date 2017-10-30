@@ -1,4 +1,5 @@
-var view = function(boardElement, teamA, teamB, sockMgr) {
+var view = function(boardElement, teamA, teamB, sockMgr, isMasterUser) {
+    view.isMasterUser = isMasterUser;
     view.sockMgr = sockMgr;
     view.moveMyPaddle = function(playerId, position) {
         var targetPaddle = view.paddleDictionary["p" + playerId];
@@ -41,6 +42,7 @@ var view = function(boardElement, teamA, teamB, sockMgr) {
         });
        
         view.world.on('collisions:detected', function( data ){
+            if (!view.isMasterUser) return; //only the master user needs to worry about detecting collisions.
             var found = Physics.util.find( data.collisions, view.paddleColissionQuery );
             if ( found ){
                 var resolveBall = found.bodyA.radius?found.bodyA:found.bodyB;
