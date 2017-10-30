@@ -49,7 +49,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12" style="margin-top: 10px">
-                            <input id="login_button" type="button" value="Sign Up" name='submit'></input> <!--  type='submit' -->
+                            <input id="login_button" type="button" class="btn btn-default" value="Sign Up" name='submit'></input> <!--  type='submit' -->
                         </div>
                     </div>
                 </form>
