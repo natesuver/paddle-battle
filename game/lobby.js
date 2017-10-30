@@ -339,7 +339,7 @@ function startGame() {
 }
 function startPolling()
 {
-	pollingInterval = setInterval(pollForPlayers, 3000);
+	pollingInterval = setInterval(pollForPlayers, 1000);
 }
 
 function stopPolling()
