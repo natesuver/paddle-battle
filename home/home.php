@@ -28,7 +28,6 @@
         </div>
         <div id="login_form_wrapper">
             <div class="row text-center">
-                <form action="" method="POST">
                     <div class="row">
                         <div class="col-md-12">
                             Username: <input id="login_username" type='text' name='username'></input>
@@ -43,13 +42,13 @@
                     <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <input id="login_button" type='submit' value="Log In" name='submit'></input>
+                            <input id="login_button" class="btn btn-default" type='button' value="Log In" name='submit'></input>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
-        <div>
+        <div id="feedback_display" class="row text-center">
+        </div>
             <div class="row text-center">
                 <div class="col-md-12" id="signUp">
                     Not registered?  Sign up <a href="../signup/signup.php">here!</a>
