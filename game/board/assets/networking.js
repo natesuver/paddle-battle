@@ -1,4 +1,4 @@
-class sockManager {
+class Networking {
     constructor(serverName,gameUrl, gameId, onBehavior) {
         this.serverName = serverName;
         this.gameUrl = gameUrl;

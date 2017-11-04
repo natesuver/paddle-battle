@@ -1,3 +1,5 @@
+(function(){
+
 var game_id;
 var first_load;
 var pollingInterval;
@@ -39,7 +41,7 @@ function fillSelectBox()
 				var serverName = item[1];
 				var id = item[3];
 				var serverUrl =  item[2];
-				sockets.push(new sockManager(serverName, serverUrl, id,onBehavior ));
+				sockets.push(new Networking(serverName, serverUrl, id,onBehavior ));
 				$('select').append($("<option></option>")
 					.attr("value", id)
 					.attr("disabled", true)
@@ -441,3 +443,4 @@ function onBehavior(name, data) {
 	}
 }
 
+  })();

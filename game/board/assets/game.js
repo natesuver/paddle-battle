@@ -1,80 +1,71 @@
-var boardCanvas, sockMgr, gameId, playerId, gameView, isMasterUser;
+var activeGameInstance, activeEngine;
+var game = function(game_id, playerId){
+    this.game_id = game_id;
+    this.playerId = playerId;
+    this.isMasterUser = false;
+  }
 
-document.getElementById('gameSurface').style.visibility = "hidden";
 
-
-$(document).ready(function() { 
-    //this stops that "refresh when you swipe down" action from happening
-    document.body.addEventListener('touchmove', function(event) {
-        event.preventDefault();
-      }, false); 
-
-      let params = (new URL(document.location)).searchParams;
-      gameId = parseInt(params.get("gameId"));
-      playerId = parseInt(params.get("playerId"));
-      getData(gameId);
-      boardCanvas = $("#gameSurface");
-
-});
-
-function getData(game_id) {
+  game.prototype.getData = function() {
+      var self = this;
     //use promise chaining to grab data needed to begin game.
     $.when(
         $.ajax({
             type: "POST",
             url: "../getTeams.php",
             data: {
-                game_id: game_id
+                game_id: this.game_id
             }}),
             $.ajax({
                 type: "POST",
                 url: "../getServer.php",
                 data: {
-                    game_id: game_id
+                    game_id: this.game_id
                 }})
             )
         .done(function(players, serverData){
             var server = JSON.parse(serverData[0]);
-            isMasterUser = (playerId==server[0].master_user);
-            initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name,isMasterUser);
+            self.isMasterUser = (self.playerId==server[0].master_user);
+            self.initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
         }); 
 }
 
 
-function initBoard(gameData, url, serverName, isMasterUser) {
+game.prototype.initBoard = function(gameData, url, serverName) {
     var teamA = _.filter(gameData,function(o){
         return o.team==1});
     var teamB = _.filter(gameData,function(o){
         return o.team==2});
-    sockMgr = new sockManager(serverName,url, gameId, onBehavior);
-    gameView = view($("#gameBoard"), teamA, teamB, sockMgr, isMasterUser);
-    addListeners();
+    this.networking = new Networking(serverName,url, gameId, this.onBehavior);
+    activeEngine
+    this.engine = new physicsEngine($("#gameBoard"), teamA, teamB, this.networking, this.isMasterUser);
+    activeEngine = this.engine;
+    this.addListeners();
 }
 
 //Setup listeners for the paddle position slider.  Supported by both touch and mouse.
-function addListeners() {
-    var obj = document.getElementById('slider');
-    obj.addEventListener('touchmove', function(event) {
+game.prototype.addListeners = function() {
+    //var obj = document.getElementById('slider');
+    var self = this;
+    window.addEventListener('touchmove', function(event) {
       // If there's exactly one finger inside this element
       if (event.targetTouches.length == 1) {
         var touch = event.targetTouches[0];
-        gameView.moveMyPaddle(playerId,touch.pageY); 
+        self.engine.moveMyPaddle(self.playerId,touch.pageY); 
       }
     }, false);
-    obj.addEventListener('mousemove', function(event) {
-        gameView.moveMyPaddle(playerId,event.pageY-40); 
+    window.addEventListener('mousemove', function(event) {
+        self.engine.moveMyPaddle(self.playerId,event.pageY-40); 
     }, false);
 }
-
-function startGame() {
-    document.getElementById('gameSurface').style.visibility = "visible";
-    gameView.start();
+game.prototype.getRandomBallStartPosition= function() {
+    var rand = Math.floor(Math.random() * 2) + 1  
+    return (rand==1?.25:-.25); //start with a value of either .25 or -.25, determined randomly.
 }
-
-function onBehavior(name, data) {
+game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
-            var cd = new Countdown($("#countdown"),5,"Go!", startGame);
+            var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             break;
         case "resetBall": //occurs after a team gets a point.
@@ -87,7 +78,7 @@ function onBehavior(name, data) {
             break;
         case "paddleChange": //occurs when another player changes their paddle position (not your own)
             var paddleData = data; //paddleData is a json object e.g. {'l':0,'p':0 }.  'l' is the location (Y coordinate) of the paddle, 'p' is the player id
-            gameView.moveOtherPaddle(paddleData.p,paddleData.l);
+            activeEngine.moveOtherPaddle(paddleData.p,paddleData.l);
             break;
         case "stateChange":
             var state = data; //var gameState={score: {'a':0,'b':0 },players:[], started:false};
@@ -99,19 +90,40 @@ function onBehavior(name, data) {
            // $("#Status").text = "Team A: " + scoreData.a + " Team B: " + scoreData.b;
              //here is an example something we could do when the ball is reset..
             //change the balls's color to red, and move it off the screen, and create a new ball.
-            var ballBody = gameView.ballBody; //ballBody is a reference to the ball body from physicsJS
+            var ballBody = activeEngine.ballBody; //ballBody is a reference to the ball body from physicsJS
             ballBody.state.vel.x = 0;
             ballBody.state.vel.y = .5;
             ballBody.styles.fillStyle = 'red';
             ballBody.treatment = 'kinematic';
             ballBody.recalc();
             ballBody.view = undefined; // re-creates new view on next render
-            gameView.world.render();
-            gameView.addBall();
+            activeEngine.world.render();
+            //use this function to determine the starting x and y vector of the ball
+            var x = activeGameInstance.getRandomBallStartPosition();
+            var y = activeGameInstance.getRandomBallStartPosition();
+            activeEngine.addBall(x,y);
             break;
         case "impact": //occurs whenever the ball hits something, either a paddle, or any of the walls.  This action should update game state for all players.
             var gameState = data;
+        case "score":
+            var teamAScore = data.a;
+            var teamBScore = data.b;
+            $("#status").html("Team A: " + teamAScore + " Team B: " + teamBScore);
+            break;
+        default:
         break;
-            default:
     }
 } 
+
+$(document).ready(function() { 
+//this stops that "refresh when you swipe down" action from happening
+document.body.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+    }, false); 
+
+    let params = (new URL(document.location)).searchParams;
+    gameId = parseInt(params.get("gameId"));
+    playerId = parseInt(params.get("playerId"));
+    activeGameInstance= new game(gameId,playerId);
+    activeGameInstance.getData(gameId, playerId);
+});

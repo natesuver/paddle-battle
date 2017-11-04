@@ -9,7 +9,7 @@ class Countdown {
     beginCountdown() {
         this.doCount(this.countFrom);       
     }
-    doCount(increment) {
+    doCount(increment, scope) {
         var that = this;
         setTimeout(function() {
             that.element.fadeIn(0);
@@ -18,7 +18,7 @@ class Countdown {
             if (increment>0) {
                 that.doCount(--increment);
             }
-        },that.countdownDuration);
+        },this.countdownDuration);
     }
     
     setCountdownName(increment, element) {

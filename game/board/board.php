@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
 <html>
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width; initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5 user-scalable=no; " />
+        <meta name="viewport" content="width=device-width,initial-scale=0.5,maximum-scale=0.5,minimum-scale=0.5,user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-touch-fullscreen" content="yes">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
@@ -15,14 +15,14 @@ if (!isset($_SESSION['username'])) {
         <title>Paddle Battle!!</title>
     </head>
 
-    <div id="countdown" class="text-center"> 
+    <div id="countdown"> 
         
     </div>
-    <div id="gameSurface" style="visible: hidden;">
-        <div class="gameTitle"> </div>
-        <div id="slider" class="touchSurface"> </div>
+    <div id="gameSurface">
+        <div id="status"class="gameTitle"> </div>
+       <!--  <div id="slider" class="touchSurface"> </div> -->
         <canvas id="gameBoard" ></canvas>
-        <div id="status" class="gameStatus"> </div>
+        <div  class="gameStatus"> </div>
     </div>  
       <script src="http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/physicsjs-0.6.0/physicsjs-full-0.6.0.min.js"></script>
   
@@ -30,10 +30,10 @@ if (!isset($_SESSION['username'])) {
     crossorigin="anonymous"></script>
     <script src="../../node_modules/socket.io-client/dist/socket.io.js"> </script>
     <script src="../../node_modules/lodash/lodash.min.js"> </script>
-    <script src="assets/sockManager.js"></script>
-    <script src="assets/view.js"></script>
-    <script src="assets/board.js"></script>
+    <script src="assets/networking.js"></script>
+    <script src="assets/physicsEngine.js"></script>
+    <script src="assets/game.js"></script>
     <script src="assets/countdown.js"></script>
-    <script src="assets/paddle.js"></script>
+    <script src="assets/player.js"></script>
     <script src="assets/ball.js"></script>
 </html>

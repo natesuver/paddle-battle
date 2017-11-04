@@ -73,4 +73,4 @@ if (!isset($_SESSION['username'])) {
 <script src="../node_modules/socket.io-client/dist/socket.io.js"> </script>
 <script src="../node_modules/lodash/lodash.min.js"> </script>
 <script src="lobby.js"></script>
-<script src="board/assets/sockManager.js"></script>
+<script src="board/assets/networking.js"></script>
