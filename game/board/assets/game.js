@@ -5,29 +5,58 @@ var game = function(game_id, playerId){
     this.isMasterUser = false;
   }
 
+game.prototype.endGame = function() {
+    $.ajax({
+        type: "POST",
+        url: "../endGame.php",
+        data: {
+            gameId: this.game_id
+        },
+        dataType: 'json',
+        success: function(response){
+            if(response.isValid){
+                activeGameInstance.redirectToEnd();
+            }
+        },
+        error: function(response){
+            alert('Something went wrong');
+        }
+    });
+}
 
-  game.prototype.getData = function() {
-      var self = this;
-    //use promise chaining to grab data needed to begin game.
-    $.when(
+game.prototype.redirectToEnd = function() {
+    window.location.href="gameOver.php";
+}
+game.prototype.redirectToLobby = function() {
+    window.location.href="../lobby.php";
+}
+
+game.prototype.getData = function() {
+    var self = this;
+//use promise chaining to grab data needed to begin game.
+$.when(
+    $.ajax({
+        type: "POST",
+        url: "../getTeams.php",
+        data: {
+            game_id: this.game_id
+        }}),
         $.ajax({
             type: "POST",
-            url: "../getTeams.php",
+            url: "../getServer.php",
             data: {
                 game_id: this.game_id
-            }}),
-            $.ajax({
-                type: "POST",
-                url: "../getServer.php",
-                data: {
-                    game_id: this.game_id
-                }})
-            )
-        .done(function(players, serverData){
-            var server = JSON.parse(serverData[0]);
-            self.isMasterUser = (self.playerId==server[0].master_user);
-            self.initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
-        }); 
+            }})
+        )
+    .done(function(players, serverData){
+        var server = JSON.parse(serverData[0]);
+        if (server.length==0) { //if the server cannot be loaded here, it's likely it went down or the game is over, redirect to the lobby.
+            activeGameInstance.redirectToLobby();
+            return;
+        }
+        self.isMasterUser = (self.playerId==server[0].master_user);
+        self.initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
+    }); 
 }
 
 
@@ -68,13 +97,16 @@ game.prototype.onBehavior = function(name, data) {
             var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             break;
-        case "resetBall": //occurs after a team gets a point.
-           
         case "gameOver": //occurs when the server determines the game is over
             var gameState = data; 
-            console.log("Game Over: " + JSON.stringify(gameState));
-            //TODO: record game score.
-            window.location.href="gameOver.php";
+            activeEngine.stop();
+            if (activeGameInstance.isMasterUser)
+                activeGameInstance.endGame();
+            else {
+                activeGameInstance.redirectToEnd();
+            }
+            
+
             break;
         case "paddleChange": //occurs when another player changes their paddle position (not your own)
             var paddleData = data; //paddleData is a json object e.g. {'l':0,'p':0 }.  'l' is the location (Y coordinate) of the paddle, 'p' is the player id
@@ -82,7 +114,7 @@ game.prototype.onBehavior = function(name, data) {
             break;
         case "stateChange":
             var state = data; //var gameState={score: {'a':0,'b':0 },players:[], started:false};
-            $("#Status").text = "Team A: " + state.score.a + " Team B: " + state.score.b;
+            $("#status").html("Team A: " + data.score.a + " Team B: " + data.score.b);
             break;
         case "swapBall": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
            // var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
@@ -104,14 +136,15 @@ game.prototype.onBehavior = function(name, data) {
             activeEngine.addBall(x,y);
             break;
         case "impact": //occurs whenever the ball hits something, either a paddle, or any of the walls.  This action should update game state for all players.
-            var gameState = data;
+            activeEngine.adjustState(data.ball, data.paddles);
+            break;
         case "score":
             var teamAScore = data.a;
             var teamBScore = data.b;
             $("#status").html("Team A: " + teamAScore + " Team B: " + teamBScore);
             break;
         default:
-        break;
+            break;
     }
 } 
 

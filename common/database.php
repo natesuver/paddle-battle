@@ -30,4 +30,16 @@ function cleanupDBResources($conn, $res) {
     $conn->close();
     $res->close();
 }
+
+function outputError($resource) {
+    if (!$resource) {
+        $data = array(
+			'isValid'=> false,
+			'feedback'=> "Ut-oh! Something went wrong. We're really embarrassed now."
+            );
+        echo json_encode($data);
+        return false;
+        exit;
+    }
+}
 ?>

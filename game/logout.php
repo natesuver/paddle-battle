@@ -11,7 +11,7 @@
             $success = mysqli_query($conn, $update);
             if($success){
                 //get user_id
-                $query = "SELECT id from users where username = '$username'";
+                $query = "SELECT id from users where username = '$user'";
                 $success2 = mysqli_query($conn, $query);
 
                 $user_id = '';
@@ -27,7 +27,7 @@
                 if($deleteSuccess){
                     $conn->close();
                     session_destroy();
-                    echo 'success';
+                    header( 'Location: ../home/home.php' ); 
                     exit;
                 }else{
                     echo "Something went wrong on logout";

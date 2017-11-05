@@ -24,7 +24,7 @@ function movePlayer(playerId) {
     setInterval(function() {
         console.log('Moving player: ' + playerId + " to position " + lastPosition);
         socket.emit('paddleChange',{p: playerId, l: lastPosition});
-        lastPosition+=(10*direction);
+        lastPosition+=(30*direction);
         if (Math.random() <.07) {
             direction=-direction;
         }
