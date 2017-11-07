@@ -80,6 +80,17 @@ physicsEngine.prototype.initializePhysics = function() {
             }
             var ballBody = activeEngine.ballBody;
             activeEngine.networking.ballImpact({x:ballBody.state.pos.x,y:ballBody.state.pos.y,xv:ballBody.state.vel.x,yv:ballBody.state.vel.y});
+            
+            var resolvePaddle = found.bodyA.radius?found.bodyB:found.bodyA;
+
+            if(resolvePaddle.uid > 1){ //something other than 1 should be a paddle
+                for(var key in activeEngine.paddleDictionary){
+                    var player = activeEngine.paddleDictionary[key];
+
+                    if(player.paddleId == resolvePaddle.uid){
+                        player.addHit();
+                    }
+                }               
         }
     });
 
