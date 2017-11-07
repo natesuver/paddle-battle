@@ -1,4 +1,5 @@
 var activeGameInstance, activeEngine;
+var playersArray;
 var game = function(game_id, playerId){
     this.game_id = game_id;
     this.playerId = playerId;
@@ -54,8 +55,10 @@ $.when(
             activeGameInstance.redirectToLobby();
             return;
         }
+    
         self.isMasterUser = (self.playerId==server[0].master_user);
         self.initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
+        playersArray = activeEngine.paddleDictionary;
     }); 
 }
 
