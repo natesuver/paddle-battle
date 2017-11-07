@@ -18,6 +18,7 @@ class Player{
         this.hitCount= 0;
         this.currentPlayer = player;
         this.paddleBody.id = player.id;
+        this.paddleId = this.paddleBody.uid;
         this.currentPlayerName = this.player.username;
         this.team = this.player.team;
         //let this linger, in case we want to bind to images at some point.
