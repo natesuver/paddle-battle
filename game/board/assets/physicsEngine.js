@@ -90,14 +90,14 @@ physicsEngine.prototype.initializePhysics = function() {
                     if(player.paddleId == resolvePaddle.uid){
                         player.addHit();
                     }
-                }               
+                }
+            }
         }
     });
 
     this.world.on('step', function(){
         self.world.render();
-    });
-    
+    });    
 }
 
 physicsEngine.prototype.addPaddles = function(players, startPosition) {
@@ -123,10 +123,3 @@ physicsEngine.prototype.start = function() {
 physicsEngine.prototype.stop = function() {
     Physics.util.ticker.stop();
 }
-   
-  
-   
-   
-    
-    
-   
