@@ -69,12 +69,42 @@
 
    <div id="countdown"></div>
 
-   <div id="gameSurface">
-      <div id="status"class="gameTitle"> </div>
-      <!--  <div id="slider" class="touchSurface"> </div> -->
-      <canvas id="gameBoard" ></canvas>
-      <div  class="gameStatus"> </div>
-   </div>
+   <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Fight!</h1>
+            </div>
+        </div>
+
+        <!--row for team tables-->
+        <div class="row" id="score">
+            <div class="col-md-6 text-center">
+                <div id="team1_score">Team 1 score</div> <!--team 1 score-->
+            </div>
+            <div class="col-md-6 text-center">
+                <div id="team2_score">Team 2 score</div> <!--team 2 score-->
+            </div>
+        </div>
+
+        <div class="row">
+            <!--team 1 names display-->
+            <div class="col-md-2 text-center" id="Team1">
+                <!--team 1 table-->
+                <ul id="1_table">Team 1 Players</ul>
+            </div>
+
+            <!--actual canvas for game-->
+            <div class="col-md-8 text-center" id="gameSurface">
+                <canvas id="gameboard"></canvas>
+            </div>
+
+            <!--team 2 names display-->
+            <div class="col-md-2 text-center" id="Team2"> 
+                <!--team 2 table-->
+                <ul id="2_table">Team 2 Players</ul>
+            </div>
+        </div>
+    </div>
 
    <script src="http://wellcaffeinated.net/PhysicsJS/assets/scripts/vendor/physicsjs-0.6.0/physicsjs-full-0.6.0.min.js"></script>
    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
