@@ -6,7 +6,8 @@ var game = function(game_id, playerId){
     this.isMasterUser = false;
   }
 
-game.prototype.endGame = function() {
+game.prototype.endGame = function(state) {
+    var self = this;
     $.ajax({
         type: "POST",
         url: "../endGame.php",
@@ -16,7 +17,7 @@ game.prototype.endGame = function() {
         dataType: 'json',
         success: function(response){
             if(response.isValid){
-                activeGameInstance.gameOverModal();
+                activeGameInstance.gameOverModal(state);
             }
         },
         error: function(response){
@@ -25,14 +26,15 @@ game.prototype.endGame = function() {
     });
 }
 
-game.prototype.gameOverModal = function() {
-    $("#game-over-modal").css("display", "block");
+game.prototype.gameOverModal = function(state) {
+    console.log("appear");
+    //whatever with score  state={score: {'a':0,'b':0 },players:{}, started:false, gameId: 0};
+	$("#game-over-modal").css("display", "block");
 }
 
 game.prototype.redirectToLobby = function() {
     window.location.href="../lobby.php";
 }
-
 $('#logout-from-game').on('click', function(){
     logout();
 });
@@ -85,7 +87,6 @@ game.prototype.initBoard = function(gameData, url, serverName) {
     var teamB = _.filter(gameData,function(o){
         return o.team==2});
     this.networking = new Networking(serverName,url, gameId, this.onBehavior);
-    activeEngine
     this.engine = new physicsEngine($("#gameBoard"), teamA, teamB, this.networking, this.isMasterUser);
     activeEngine = this.engine;
     this.addListeners();
@@ -113,17 +114,17 @@ game.prototype.getRandomBallStartPosition= function() {
 game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
+		    console.log("connection");
             var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             $('#game-over-modal').css("display", "none");
             break;
         case "gameOver": //occurs when the server determines the game is over
-            var gameState = data; 
             activeEngine.stop();
             if (activeGameInstance.isMasterUser)
-                activeGameInstance.endGame();
+                activeGameInstance.endGame(data); //data is a json object, contains an 'a' and 'b' property, with the integer score
             else {
-                activeGameInstance.gameOverModal();
+                activeGameInstance.gameOverModal(data);
             }
             
 
@@ -142,26 +143,36 @@ game.prototype.onBehavior = function(name, data) {
            // $("#Status").text = "Team A: " + scoreData.a + " Team B: " + scoreData.b;
              //here is an example something we could do when the ball is reset..
             //change the balls's color to red, and move it off the screen, and create a new ball.
-            var ballBody = activeEngine.ballBody; //ballBody is a reference to the ball body from physicsJS
-            ballBody.state.vel.x = 0;
-            ballBody.state.vel.y = .5;
-            ballBody.styles.fillStyle = 'red';
-            ballBody.treatment = 'kinematic';
-            ballBody.recalc();
-            ballBody.view = undefined; // re-creates new view on next render
-            activeEngine.world.render();
+           // var ballBody = activeEngine.ballBody; //ballBody is a reference to the ball body from physicsJS
+          //  ballBody.state.vel.x = 0;
+          //  ballBody.state.vel.y = .5;
+          //  ballBody.styles.fillStyle = 'red';
+           // ballBody.treatment = 'kinematic';
+          //  ballBody.recalc();
+          //  ballBody.view = undefined; // re-creates new view on next render
+          //  activeEngine.world.render();
+          //  activeEngine.removeBall(ballBody);
+           // activeEngine.removeBall();
+           // var x = activeGameInstance.getRandomBallStartPosition();
+           // var y = activeGameInstance.getRandomBallStartPosition();
+           
+           // activeEngine.addBall(x,y);
+           // setTimeout(function() {
+                
+           // },500);
             //use this function to determine the starting x and y vector of the ball
-            var x = activeGameInstance.getRandomBallStartPosition();
-            var y = activeGameInstance.getRandomBallStartPosition();
-            activeEngine.addBall(x,y);
+            
             break;
         case "impact": //occurs whenever the ball hits something, either a paddle, or any of the walls.  This action should update game state for all players.
-            activeEngine.adjustState(data.ball, data.paddles);
+            if (!activeGameInstance.isMasterUser) {
+                activeEngine.adjustState(data.ball, data.paddles);
+            }
             break;
         case "score":
             var teamAScore = data.a;
             var teamBScore = data.b;
             $("#status").html("Team A: " + teamAScore + " Team B: " + teamBScore);
+           // this.onBehavior("swapBall",null);
             break;
         default:
             break;

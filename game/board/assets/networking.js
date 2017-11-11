@@ -37,8 +37,11 @@ class Networking {
     }
 
     recordScore(team) {
-        this.onBehavior("swapBall",null);
+        //this.onBehavior("swapBall",null);
         this.socket.emit('score', team);
+    }
+    recordHit(playerId) {
+        this.socket.emit('hit', playerId);
     }
     paddleMoved(position, playerId) {
         this.socket.emit('paddleChange', {l:position,p:playerId});

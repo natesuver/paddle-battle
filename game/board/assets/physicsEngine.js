@@ -31,11 +31,14 @@ physicsEngine.prototype.moveOtherPaddle = function(playerId, position) {
 }
 
 physicsEngine.prototype.adjustState = function(ball, paddles) {
+   // activeEngine.stop();
     var ballBody = this.ballBody; //ballBody is a reference to the ball body from physicsJS
     ballBody.state.vel.x = ball.xv;
     ballBody.state.vel.y = ball.yv;
     ballBody.state.pos.x = ball.x;
     ballBody.state.pos.y = ball.y;
+   // activeEngine.start();
+    console.log("Updating Ball: xv: " + ball.xv + " xv: "+ ball.yv + "x: "+ ball.x + " y: "+ ball.y)
     activeEngine.world.render();
     //todo: add paddle support
 }
@@ -74,20 +77,23 @@ physicsEngine.prototype.initializePhysics = function() {
             var resolveBall = found.bodyA.radius?found.bodyA:found.bodyB;
             if (resolveBall.state.pos.x<=12) {
                 activeEngine.networking.recordScore('b');
+               // activeEngine.removeBall();
             }
             if (resolveBall.state.pos.x>=538) {
                 activeEngine.networking.recordScore('a');
+               // activeEngine.removeBall();
             }
             var ballBody = activeEngine.ballBody;
-            activeEngine.networking.ballImpact({x:ballBody.state.pos.x,y:ballBody.state.pos.y,xv:ballBody.state.vel.x,yv:ballBody.state.vel.y});
-            
+            if (ballBody) {
+                activeEngine.networking.ballImpact({x:ballBody.state.pos.x,y:ballBody.state.pos.y,xv:ballBody.state.vel.x,yv:ballBody.state.vel.y});
+            }
             var resolvePaddle = found.bodyA.radius?found.bodyB:found.bodyA;
 
             if(resolvePaddle.uid > 1){ //something other than 1 should be a paddle
                 for(var key in activeEngine.paddleDictionary){
                     var player = activeEngine.paddleDictionary[key];
-
                     if(player.paddleId == resolvePaddle.uid){
+                        activeEngine.networking.recordHit(player.currentPlayer.id);
                         player.addHit();
                     }
                 }
@@ -106,11 +112,18 @@ physicsEngine.prototype.addPaddles = function(players, startPosition) {
     for (var i=0;i<players.length; i++) {
         player =players[i];
         paddle = new Player(i, players.length, startPosition, player);
-        this.paddleDictionary["p" + player.id] = paddle; //a dictionary for fast paddle lookup when the socket receives a new position from another player.
+        this.paddleDictionary["p" + player.id] = paddle; //a dictionary for fast paddle/player lookup when the socket receives a new position from another player.
         this.world.add(paddle.body);
     }
 }
-
+/*
+physicsEngine.prototype.removeBall = function() {
+    if (this.ballBody) {
+        this.world.removeBody(this.ballBody);
+        this.ballBody = null;
+    }
+}
+*/
 physicsEngine.prototype.addBall = function(xVelocity, yVelocity) {
     var ball = new Ball(this.boardElement.width()/2, this.boardElement.height()/2, xVelocity, yVelocity)
     this.world.add(ball.body);
