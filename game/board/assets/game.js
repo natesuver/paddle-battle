@@ -16,7 +16,7 @@ game.prototype.endGame = function() {
         dataType: 'json',
         success: function(response){
             if(response.isValid){
-                activeGameInstance.redirectToEnd();
+                activeGameInstance.gameOverModal();
             }
         },
         error: function(response){
@@ -28,6 +28,12 @@ game.prototype.endGame = function() {
 game.prototype.redirectToEnd = function() {
     window.location.href="gameOver.php";
 }
+
+game.prototype.gameOverModal = function() {
+	console.log("appear");
+	$("#gameOverModal").css("display","block");
+}
+
 game.prototype.redirectToLobby = function() {
     window.location.href="../lobby.php";
 }
@@ -97,6 +103,7 @@ game.prototype.getRandomBallStartPosition= function() {
 game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
+		console.log("connection");
             var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             break;
