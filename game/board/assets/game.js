@@ -8,16 +8,19 @@ var game = function(game_id, playerId){
 
 game.prototype.endGame = function(state) {
     var self = this;
+    self.state = state;
     $.ajax({
         type: "POST",
         url: "../endGame.php",
         data: {
-            gameId: this.game_id
+            gameId: this.game_id,
+            teamAScore: this.state.score.a,
+            teamBScore: this.state.score.b
         },
         dataType: 'json',
         success: function(response){
             if(response.isValid){
-                activeGameInstance.gameOverModal(state);
+                activeGameInstance.gameOverModal(self.state);
             }
         },
         error: function(response){
