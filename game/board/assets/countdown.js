@@ -5,31 +5,40 @@ class Countdown {
       this.terminalStatement = terminalStatement;
       this.countdownDuration = 800;
       this.onStart = onStart;
+      this.increment=0;
+    }
+    fade() {
+        this.element.fadeIn(0);
+        this.setCountdownName(this.increment, this.element);
+        this.element.fadeOut(this.countdownDuration);
     }
     beginCountdown() {
-        this.doCount(this.countFrom);       
+        this.increment = this.countFrom;
+        this.fade(); //start the countdown immediately, do not wait for timeout.
+        this.increment--;
+        if (this.increment > -1) {
+            this.doCount(this.increment);  
+        }
     }
     doCount(increment, scope) {
         var that = this;
         setTimeout(function() {
-            that.element.fadeIn(0);
-            that.setCountdownName(increment, that.element);
-            that.element.fadeOut(that.countdownDuration);
-            if (increment>0) {
-                that.doCount(--increment);
+            that.fade();
+            if (that.increment>0) {
+                that.doCount(--that.increment);
             }
-        },this.countdownDuration);
+        },this.countdownDuration);      
     }
     
     setCountdownName(increment, element) {
-        if (increment===0) {
+        if (this.increment===0) {
             element.text(this.terminalStatement);
             element.css('color', 'red');
             element.css('font-weight', 'bolder');
             element.fadeOut(this.countdownDuration, this.onStart);
         }
         else {
-            element.text(increment);
+            element.text(this.increment);
         }
     }
   }

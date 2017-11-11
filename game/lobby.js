@@ -425,8 +425,14 @@ function onBehavior(name, data) {
 	var id = data.gameId;
 	switch (name ) {
 		case "connect":
-			$("#game" + id).attr("disabled",false);
-			$("#game" + id).attr("style","color:green");
+			var started = data.started;
+			$("#game" + id).attr("disabled",started);
+			if (started) {
+				$("#game" + id).attr("style","color:blue");
+			}
+			else {
+				$("#game" + id).attr("style","color:green");
+			}		
 			console.log("Connection established for game " + id);
 			break;
 		case "disconnect":

@@ -141,7 +141,9 @@ game.prototype.onBehavior = function(name, data) {
             $("#status").html("Team A: " + data.score.a + " Team B: " + data.score.b);
             break;
         case "swapBall": //occurs when a team successfully gets a score.  Note that resetball is called immediately after this.
-           // var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
+            var cd = new Countdown($("#countdown"),0,"HIT!", null);
+            cd.beginCountdown();   
+        // var scoreData = data; //scoreData is a json object e.g. {'a':0,'b':0 }.  'a' is the score for team a, 'b' is the score for team b
            // console.log("Score is now: " + JSON.stringify(scoreData))
            // $("#Status").text = "Team A: " + scoreData.a + " Team B: " + scoreData.b;
              //here is an example something we could do when the ball is reset..
@@ -175,7 +177,7 @@ game.prototype.onBehavior = function(name, data) {
             var teamAScore = data.a;
             var teamBScore = data.b;
             $("#status").html("Team A: " + teamAScore + " Team B: " + teamBScore);
-           // this.onBehavior("swapBall",null);
+            this.onBehavior("swapBall",null);
             break;
         default:
             break;

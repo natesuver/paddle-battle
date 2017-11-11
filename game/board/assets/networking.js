@@ -31,7 +31,7 @@ class Networking {
             self.socket.on('gameOver', function(stateInfo) {
                 self.onBehavior("gameOver",JSON.parse(stateInfo));
             });
-            self.onBehavior("connect", JSON.parse(data));
+            self.onBehavior("connect", self.gameState);
         });
        
     }
