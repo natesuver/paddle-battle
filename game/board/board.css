@@ -24,7 +24,7 @@ body {
     padding: 0px;
     margin: 0px;
     width: 550px;
-    height: 550px;
+    height: 500px;
     z-index: 1;
 }
 
@@ -97,4 +97,18 @@ h1 {
 
 #score {
     padding-bottom: 20px;
+}
+
+.player-color{
+	height: 17px;
+	width: 17px;
+	margin: auto;
+}
+
+ul{
+	margin-right: 15px;
+}
+
+.player-item{
+	padding: 7px;
 }
