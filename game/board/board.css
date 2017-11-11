@@ -16,15 +16,15 @@ body {
 	text-align: center;
 }
 
-#gameboard {
+#gameBoard {
     background-color: lightblue;
     border: 1px solid black;
     display: inline-block;
     position: relative;
     padding: 0px;
     margin: 0px;
-    width: 600px;
-    height: 600px;
+    width: 550px;
+    height: 550px;
     z-index: 1;
 }
 
