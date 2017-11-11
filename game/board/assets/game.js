@@ -25,17 +25,27 @@ game.prototype.endGame = function() {
     });
 }
 
-game.prototype.redirectToEnd = function() {
-    window.location.href="gameOver.php";
-}
-
 game.prototype.gameOverModal = function() {
-	console.log("appear");
-	$("#gameOverModal").css("display","block");
+    $("#game-over-modal").css("display", "block");
 }
 
 game.prototype.redirectToLobby = function() {
     window.location.href="../lobby.php";
+}
+
+$('#logout-from-game').on('click', function(){
+    logout();
+});
+
+function logout()
+{
+    $.ajax({
+        type: "POST",
+        url: "../logout.php",
+        success: function(response){
+            window.location = '../../../home/home.php';
+        }
+    });
 }
 
 game.prototype.getData = function() {
@@ -103,9 +113,9 @@ game.prototype.getRandomBallStartPosition= function() {
 game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
-		console.log("connection");
             var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
+            $('#game-over-modal').css("display", "none");
             break;
         case "gameOver": //occurs when the server determines the game is over
             var gameState = data; 
@@ -113,7 +123,7 @@ game.prototype.onBehavior = function(name, data) {
             if (activeGameInstance.isMasterUser)
                 activeGameInstance.endGame();
             else {
-                activeGameInstance.redirectToEnd();
+                activeGameInstance.gameOverModal();
             }
             
 
