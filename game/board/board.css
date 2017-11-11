@@ -49,3 +49,26 @@
 	
 }
 
+.modal-header {
+	background-color: black;
+	color: white;
+	
+}
+
+
+.container-fluid {
+	background-color: black;
+	font-family: 'OCR A';
+    font-weight: bold;
+    margin-top: 1px;
+    color: white;
+}
+
+
+.modal-body{
+	background-color: black;
+	font-family: 'OCR A';
+    font-weight: bold;
+    margin-top: 1px;
+    color: white;
+}
