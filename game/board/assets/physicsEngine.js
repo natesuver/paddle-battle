@@ -30,17 +30,22 @@ physicsEngine.prototype.moveOtherPaddle = function(playerId, position) {
     targetPaddle.paddleBody.state.pos.y = position;
 }
 
-physicsEngine.prototype.adjustState = function(ball, paddles) {
+physicsEngine.prototype.adjustState = function(ballState) {
    // activeEngine.stop();
-    var ballBody = this.ballBody; //ballBody is a reference to the ball body from physicsJS
-    ballBody.state.vel.x = ball.xv;
-    ballBody.state.vel.y = ball.yv;
-    ballBody.state.pos.x = ball.x;
-    ballBody.state.pos.y = ball.y;
-   // activeEngine.start();
-    console.log("Updating Ball: xv: " + ball.xv + " xv: "+ ball.yv + "x: "+ ball.x + " y: "+ ball.y)
+    var state = this.ballBody.state; //ballBody is a reference to the ball body from physicsJS
+    var setValues = function(stateObject, targetObject) {
+        targetObject.pos.x = stateObject.pos._[0];
+        targetObject.pos.y = stateObject.pos._[1];
+        targetObject.vel.x = stateObject.vel._[0];
+        targetObject.vel.y = stateObject.vel._[1];
+        targetObject.angular.pos = stateObject.angular.pos;
+        targetObject.angular.vel = stateObject.angular.vel;
+    }
+    setValues(ballState,state);
+    setValues(ballState.old,state.old);
+   
     activeEngine.world.render();
-    //todo: add paddle support
+
 }
 
 physicsEngine.prototype.initializePhysics = function() {
@@ -55,17 +60,17 @@ physicsEngine.prototype.initializePhysics = function() {
     });	
 
     this.world.add(renderer);    
-    this.world.add( Physics.behavior('sweep-prune') );
+   // this.world.add( Physics.behavior('sweep-prune') );
     var bounds = Physics.aabb(0, 0, this.boardElement.width(), this.boardElement.height()); //define the boundaries of our container.
     this.world.add( Physics.behavior('edge-collision-detection', {
         aabb: bounds,
         restitution: 1
     }) );
     this.world.add( Physics.behavior('body-collision-detection') );
-    this.world.add( Physics.behavior('sweep-prune') );
+    
     // ensure objects bounce when edge collision is detected
     this.world.add( Physics.behavior('body-impulse-response') );
-
+    this.world.add( Physics.behavior('sweep-prune') );
     Physics.util.ticker.on(function( time, dt ){
         self.world.step( time );
     });
@@ -83,10 +88,7 @@ physicsEngine.prototype.initializePhysics = function() {
                 activeEngine.networking.recordScore('a');
                // activeEngine.removeBall();
             }
-            var ballBody = activeEngine.ballBody;
-            if (ballBody) {
-                activeEngine.networking.ballImpact({x:ballBody.state.pos.x,y:ballBody.state.pos.y,xv:ballBody.state.vel.x,yv:ballBody.state.vel.y});
-            }
+            activeEngine.recordBallImpact();
             var resolvePaddle = found.bodyA.radius?found.bodyB:found.bodyA;
 
             if(resolvePaddle.uid > 1){ //something other than 1 should be a paddle
@@ -104,6 +106,13 @@ physicsEngine.prototype.initializePhysics = function() {
     this.world.on('step', function(){
         self.world.render();
     });    
+}
+
+physicsEngine.prototype.recordBallImpact = function() {
+    var ballBody = this.ballBody;
+    if (ballBody) {
+        this.networking.ballImpact(ballBody.state);
+    }
 }
 
 physicsEngine.prototype.addPaddles = function(players, startPosition) {

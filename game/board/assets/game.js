@@ -165,7 +165,7 @@ game.prototype.onBehavior = function(name, data) {
             break;
         case "impact": //occurs whenever the ball hits something, either a paddle, or any of the walls.  This action should update game state for all players.
             if (!activeGameInstance.isMasterUser) {
-                activeEngine.adjustState(data.ball, data.paddles);
+                activeEngine.adjustState(data);
             }
             break;
         case "score":

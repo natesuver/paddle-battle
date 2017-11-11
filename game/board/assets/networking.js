@@ -46,8 +46,8 @@ class Networking {
     paddleMoved(position, playerId) {
         this.socket.emit('paddleChange', {l:position,p:playerId});
     }
-    ballImpact(ball) {
-        this.socket.emit('impactDetected', {ball: ball});
+    ballImpact(ballState) {
+        this.socket.emit('impactDetected', ballState);
     }
     closeSocket() {
         this.socket.disconnect();
