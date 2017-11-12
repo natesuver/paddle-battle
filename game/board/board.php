@@ -95,7 +95,7 @@
 
             <!--actual canvas for game-->
             <div class="col-md-8 text-center" id="gameSurface">
-                <canvas id="gameboard"></canvas>
+                <canvas id="gameBoard"></canvas>
             </div>
 
             <!--team 2 names display-->

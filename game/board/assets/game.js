@@ -9,6 +9,8 @@ var game = function(game_id, playerId){
 game.prototype.endGame = function(state) {
     var self = this;
     self.state = state;
+    console.log(state);
+    console.log('try');
     $.ajax({
         type: "POST",
         url: "../endGame.php",
@@ -30,9 +32,8 @@ game.prototype.endGame = function(state) {
 }
 
 game.prototype.gameOverModal = function(state) {
-    console.log("appear");
     //whatever with score  state={score: {'a':0,'b':0 },players:{}, started:false, gameId: 0};
-	$("#game-over-modal").css("display", "block");
+    $("#game-over-modal").css("display", "block");
 }
 
 game.prototype.redirectToLobby = function() {
@@ -80,6 +81,20 @@ $.when(
         self.isMasterUser = (self.playerId==server[0].master_user);
         self.initBoard(JSON.parse(players[0]), server[0].url, server[0].server_name);
         playersArray = activeEngine.paddleDictionary;
+
+        for(var key in playersArray){
+            
+            var player = playersArray[key];
+            var color = player.color;
+            var name = player.currentPlayerName;
+            var team = parseInt(player.team);
+
+            if(team === 1){
+                $('#1_table').append("<li class='player-item'>"+name+" <div class='player-color' style='background:"+color+"'></div></li>");
+            }else if(team === 2){
+                $('#2_table').append("<li class='player-item'>"+name+" <div class='player-color' style='background:"+color+"'></div></li>");
+            }
+        }
     }); 
 }
 
@@ -117,7 +132,7 @@ game.prototype.getRandomBallStartPosition= function() {
 game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
-		    console.log("connection");
+            console.log("connection");
             var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             $('#game-over-modal').css("display", "none");
