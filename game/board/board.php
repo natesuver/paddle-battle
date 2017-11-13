@@ -65,10 +65,10 @@
         <!--row for team tables-->
         <div class="row" id="score">
             <div class="col-md-6 text-center">
-                <div id="team1_score">Team A score</div> <!--team 1 score-->
+               <div id="team1_score">Team A Score: <span id="teamAScore"></span></div> <!--team 1 score-->
             </div>
             <div class="col-md-6 text-center">
-                <div id="team2_score">Team B score</div> <!--team 2 score-->
+               <div id="team2_score">Team B Score: <span id="teamBScore"></span></div> <!--team 2 score-->
             </div>
         </div>
 
