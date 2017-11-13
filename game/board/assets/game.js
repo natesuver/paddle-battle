@@ -31,11 +31,32 @@ game.prototype.endGame = function(state) {
     });
 }
 
+game.prototype.getPlayer = function(id) {
+    for(var key in playersArray){
+        var player = playersArray[key];
+        if (player.currentPlayer.id == id) return player;        
+    }
+}
 game.prototype.gameOverModal = function(state) {
     //whatever with score  state={score: {'a':0,'b':0 },players:{}, started:false, gameId: 0};
     $("#game-over-modal").css("display", "block");
+    this.setGameOverStats(state);
 }
 
+game.prototype.setGameOverStats = function(state) {
+    $('#scoreTeamA').html(state.score.a);
+    $('#scoreTeamB').html(state.score.b);
+    var winner = state.score.a > state.score.b?'A':'B';
+    $('#teamWin').html("TEAM " + winner + " IS THE WINNER!!");
+
+    for(var key in state.players){
+        var playerId = state.players[key].id;
+        var player = this.getPlayer(playerId);
+        player.setHitCount(state.players[key].hits);
+        var team = parseInt(player.team);
+    }
+
+}
 game.prototype.redirectToLobby = function() {
     window.location.href="../lobby.php";
 }

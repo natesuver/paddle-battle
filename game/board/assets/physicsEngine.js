@@ -23,11 +23,14 @@ var physicsEngine = function(boardElement, teamA, teamB, networking, isMasterUse
 physicsEngine.prototype.moveMyPaddle = function(playerId, position) {
     var targetPaddle = this.paddleDictionary["p" + playerId];
     targetPaddle.paddleBody.state.pos.y = position;
-    this.networking.paddleMoved(position,playerId);
+    if (position % 2==0) { //only transmit paddle moves every other pixel, this helps with performance and doesn't impact game play.
+        this.networking.paddleMoved(position,playerId);
+    }
+    
 }
 physicsEngine.prototype.moveOtherPaddle = function(playerId, position) {
     var targetPaddle = this.paddleDictionary["p" + playerId];
-    targetPaddle.paddleBody.state.pos.y = position;
+    targetPaddle.paddleBody.state.pos.y = position;    
 }
 
 physicsEngine.prototype.adjustState = function(ballState) {

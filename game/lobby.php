@@ -33,7 +33,7 @@ if (!isset($_SESSION['username'])) {
             <div class="row" id="Teams">
                 <div class="col-sm-5" id="Team1">
                     <!--will hopefully post username-->
-                    Team 1
+                    Team A
                     <ol id="1_list"> <!--Empty list for team A-->
                     </ol>
                 </div>

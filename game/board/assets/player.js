@@ -31,5 +31,6 @@ class Player{
     get body() { return this.paddleBody;}
     get hits() {return this.hitCount;}
     addHit() { this.hitCount++;}
+    setHitCount(count) { this.hitCount = count;}
     get player() {return this.currentPlayer;}
 }

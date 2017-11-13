@@ -22,14 +22,14 @@
                <img src="images/game_over.jpg" class="img-responsive center-block">
             </div>
             <div class="container-fluid">
-               <div class="col-md-12 text-center">Team Win goes here</div>
+            <div id="teamWin" class="col-md-12 text-center">Team Win goes here</div>
             </div>
             <!-- body (form) -->
             <div class="modal-body">
                <div class = "container">
                   <div class= "row">
-                     <div class="col-md-2">Team 1 Score:</div>
-                     <div class="col-md-2 text-right" >Team 2 Score:</div>
+                     <div class="col-md-2">Team A Score: <span id="scoreTeamA"></span></div>
+                     <div class="col-md-2 text-right" >Team B Score: <span id="scoreTeamB"></span></div>
                   </div>
                   <br>
                   <div class= "row">
@@ -79,10 +79,10 @@
         <!--row for team tables-->
         <div class="row" id="score">
             <div class="col-md-6 text-center">
-                <div id="team1_score">Team 1 score</div> <!--team 1 score-->
+                <div id="team1_score">Team A score</div> <!--team 1 score-->
             </div>
             <div class="col-md-6 text-center">
-                <div id="team2_score">Team 2 score</div> <!--team 2 score-->
+                <div id="team2_score">Team B score</div> <!--team 2 score-->
             </div>
         </div>
 
@@ -90,7 +90,7 @@
             <!--team 1 names display-->
             <div class="col-md-2 text-center" id="Team1">
                 <!--team 1 table-->
-                <ul id="1_table">Team 1 Players</ul>
+                <ul id="1_table">Team A Players</ul>
             </div>
 
             <!--actual canvas for game-->
@@ -101,7 +101,7 @@
             <!--team 2 names display-->
             <div class="col-md-2 text-center" id="Team2"> 
                 <!--team 2 table-->
-                <ul id="2_table">Team 2 Players</ul>
+                <ul id="2_table">Team B Players</ul>
             </div>
         </div>
     </div>
