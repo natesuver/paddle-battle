@@ -9,8 +9,6 @@ var game = function(game_id, playerId){
 game.prototype.endGame = function(state) {
     var self = this;
     self.state = state;
-    console.log(state);
-    console.log('try');
     $.ajax({
         type: "POST",
         url: "../endGame.php",
@@ -39,6 +37,7 @@ game.prototype.getPlayer = function(id) {
 }
 game.prototype.gameOverModal = function(state) {
     //whatever with score  state={score: {'a':0,'b':0 },players:{}, started:false, gameId: 0};
+    $('#fade').css('display', 'block');
     $("#game-over-modal").css("display", "block");
     this.setGameOverStats(state);
 }
@@ -53,7 +52,15 @@ game.prototype.setGameOverStats = function(state) {
         var playerId = state.players[key].id;
         var player = this.getPlayer(playerId);
         player.setHitCount(state.players[key].hits);
+        var name = player.currentPlayerName;
         var team = parseInt(player.team);
+        var hits = player.hitCount;
+        
+        if(team == 1){
+            $('#team1Hits').append("<li>"+name+": "+hits+"</li>");
+        }else if(team == 2){
+            $('#team2Hits').append("<li>"+name+": "+hits+"</li>");
+        }
     }
 
 }
