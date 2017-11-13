@@ -219,7 +219,8 @@ game.prototype.onBehavior = function(name, data) {
         case "score":
             var teamAScore = data.a;
             var teamBScore = data.b;
-            $("#status").html("Team A: " + teamAScore + " Team B: " + teamBScore);
+            $("#teamAScore").html(teamAScore);
+            $("#teamBScore").html(teamBScore);
             this.onBehavior("swapBall",null);
             break;
         default:
