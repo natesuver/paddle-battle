@@ -366,9 +366,15 @@ function bindEvents()
 {
 	//when server select box changes, populate it with players currently joined to game
 	$('select').on("change", function(){
+		
+		game_id = $('select').find(":selected").attr("value");
+		var sock = getSelectedSocket(game_id);
+		if (sock.gameState.started) {
+			alert('This game has already started.  Click the Forward button on your browser if you are a player and wish to return, otherwise pick another server.');
+			return;
+		}
 		stopPolling();
 		showSpinner();
-		game_id = $('select').find(":selected").attr("value");
 		populatePlayers();
 
 		setTimeout(startPolling, 2000);
@@ -426,7 +432,7 @@ function onBehavior(name, data) {
 	switch (name ) {
 		case "connect":
 			var started = data.started;
-			$("#game" + id).attr("disabled",started);
+			$("#game" + id).attr("disabled",false);
 			if (started) {
 				$("#game" + id).attr("style","color:blue");
 			}
