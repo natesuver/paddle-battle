@@ -94,7 +94,7 @@
             </div>
 
             <!--actual canvas for game-->
-            <div class="col-md-8 text-center" id="gameSurface">
+            <div class="col-md-8 col-xs-8 text-center" id="gameSurface">
                 <canvas id="gameBoard"></canvas>
             </div>
 
