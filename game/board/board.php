@@ -14,6 +14,8 @@
       <link rel="stylesheet" href="board.css" />
       <title>Paddle Battle!!</title>
    </head>
+
+   <div id="fade"></div>
    <div class="modal" id="game-over-modal">
       <div class="modal-dialog">
          <div class="modal-content">
@@ -28,33 +30,17 @@
             <div class="modal-body">
                <div class = "container">
                   <div class= "row">
-                     <div class="col-md-2">Team A Score: <span id="scoreTeamA"></span></div>
-                     <div class="col-md-2 text-right" >Team B Score: <span id="scoreTeamB"></span></div>
+                     <div class="col-md-3 text-center">Team A Score: <span id="scoreTeamA"></span></div>
+                     <div class="col-md-3 text-center">Team B Score: <span id="scoreTeamB"></span></div>
                   </div>
                   <br>
                   <div class= "row">
-                     <div class="col-md-2">Blocked Shots</div>
-                     <div class="col-md-2 text-right">Blocked Shots</div>
+                     <div class="col-md-3 text-center">Blocked Shots</div>
+                     <div class="col-md-3 text-center">Blocked Shots</div>
                   </div>
                   <div class= "row">
-                     <div class="col-md-2">Player 1:</div>
-                     <div class="col-md-2 text-right">Player 1:</div>
-                  </div>
-                  <div class= "row">
-                     <div class="col-md-2">Player 2:</div>
-                     <div class="col-md-2 text-right">Player 2:</div>
-                  </div>
-                  <div class= "row">
-                     <div class="col-md-2">Player 3:</div>
-                     <div class="col-md-2 text-right">Player 3:</div>
-                  </div>
-                  <div class= "row">
-                     <div class="col-md-2">Player 4:</div>
-                     <div class="col-md-2 text-right">Player 4:</div>
-                  </div>
-                  <div class= "row">
-                     <div class="col-md-2">Player 5:</div>
-                     <div class="col-md-2 text-right">Player 5:</div>
+                     <ul id="team1Hits" class="col-md-3 text-center"></ul>
+                     <ul id="team2Hits" class="col-md-3 text-center"></ul>
                   </div>
                </div>
                <!-- button -->
