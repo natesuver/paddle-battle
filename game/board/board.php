@@ -30,8 +30,8 @@
             <div class="modal-body">
                <div class = "container">
                   <div class= "row">
-                     <div class="col-md-3 text-center">Team A Score: <span id="teamAScore"></span></div>
-                     <div class="col-md-3 text-center">Team B Score: <span id="teamBScore"></span></div>
+                     <div class="col-md-3 text-center">Team A Score: <span id="scoreTeamA"></span></div>
+                     <div class="col-md-3 text-center">Team B Score: <span id="scoreTeamB"></span></div>
                   </div>
                   <br>
                   <div class= "row">
