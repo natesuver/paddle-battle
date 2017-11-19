@@ -55,6 +55,9 @@ class Networking {
     startGame() {
         this.socket.emit('gameStarted', null);
     }
+    cancelGame() {
+        this.socket.emit('cancel', null);
+    }
     get connected() {
         return this.socket.connected;
     }

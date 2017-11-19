@@ -370,7 +370,12 @@ function bindEvents()
 		game_id = $('select').find(":selected").attr("value");
 		var sock = getSelectedSocket(game_id);
 		if (sock.gameState.started) {
-			alert('This game has already started.  Click the Forward button on your browser if you are a player and wish to return, otherwise pick another server.');
+			if (confirm('This game has already started.  Do you wish to terminate it?')) {
+				sock.cancelGame();
+				endGame(game_id);
+			} else {
+				// Do nothing!  User decides this is not a good idea.
+			}
 			return;
 		}
 		stopPolling();
@@ -427,19 +432,42 @@ function getSelectedSocket(gameId) {
 	return socket[0]; //lodash returns an array, grab the first element.
 }
 
+function endGame(gameId) {
+	$.ajax({
+        type: "POST",
+        url: "endGame.php",
+        data: {
+            gameId: gameId,
+            teamAScore: -1, //terminating a game should result in all scores being set to something meaningless.. they should not be valid.
+            teamBScore: -1
+        },
+        dataType: 'json',
+        success: function(response){
+            alert('Game was reset successfully!')
+        },
+        error: function(response){
+            alert('Something went wrong');
+        }
+    });
+}
+
 function onBehavior(name, data) {
 	var id = data.gameId;
+	var setGameState = function(data) {
+		var started = data.started;
+		var id = data.gameId;
+		$("#game" + id).attr("disabled",false);
+		if (started) {
+			$("#game" + id).attr("style","color:blue");
+		}
+		else {
+			$("#game" + id).attr("style","color:green");
+		}		
+		console.log("Connection established for game " + id);
+	}
 	switch (name ) {
 		case "connect":
-			var started = data.started;
-			$("#game" + id).attr("disabled",false);
-			if (started) {
-				$("#game" + id).attr("style","color:blue");
-			}
-			else {
-				$("#game" + id).attr("style","color:green");
-			}		
-			console.log("Connection established for game " + id);
+			setGameState(data);
 			break;
 		case "disconnect":
 			$("#game" + id).attr("disabled",true);
@@ -450,7 +478,12 @@ function onBehavior(name, data) {
 			if (data.started && game_id==data.gameId) {
 				window.location.href="board/board.php?gameId=" + game_id + "&playerId=" + userid;
 			}
-
+			break;
+		case "gameOver":
+			data.started = false; //
+			setGameState(data);
+			break;
+		default:
 			break;
 	}
 }

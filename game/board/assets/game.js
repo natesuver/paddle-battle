@@ -161,7 +161,7 @@ game.prototype.onBehavior = function(name, data) {
     switch (name) {
         case "connect": //occurs on successful handshake with game server
             console.log("connection");
-            var cd = new Countdown($("#countdown"),1,"Go!", activeGameInstance.engine.start);
+            var cd = new Countdown($("#countdown"),3,"Go!", activeGameInstance.engine.start);
             cd.beginCountdown();
             $('#game-over-modal').css("display", "none");
             break;
@@ -230,7 +230,7 @@ game.prototype.onBehavior = function(name, data) {
 
 $(document).ready(function() { 
 //this stops that "refresh when you swipe down" action from happening
-document.body.addEventListener('touchmove', function(event) {
+    document.body.addEventListener('touchmove', function(event) {
     event.preventDefault();
     }, false); 
 
@@ -240,3 +240,14 @@ document.body.addEventListener('touchmove', function(event) {
     activeGameInstance= new game(gameId,playerId);
     activeGameInstance.getData(gameId, playerId);
 });
+
+
+
+window.onbeforeunload = function(e) {
+    //Note:  will not work on all browsers
+    if (activeGameInstance && activeGameInstance.isMasterUser) {
+        var dialogText = 'WARNING!  If you continue, your game will be terminated.';
+        e.returnValue = dialogText;
+        return dialogText;
+    }
+}
