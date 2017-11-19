@@ -22,12 +22,23 @@ var physicsEngine = function(boardElement, teamA, teamB, networking, isMasterUse
 
 physicsEngine.prototype.moveMyPaddle = function(playerId, position) {
     var targetPaddle = this.paddleDictionary["p" + playerId];
-    targetPaddle.paddleBody.state.pos.y = position;
-    if (position % 2==0) { //only transmit paddle moves every other pixel, this helps with performance and doesn't impact game play.
-        this.networking.paddleMoved(position,playerId);
+    if (this.paddlePositionWithinBounds(targetPaddle,position)) {
+        targetPaddle.paddleBody.state.pos.y = position;
+        if (position % 2==0) { //only transmit paddle moves every other pixel, this helps with performance and doesn't impact game play.
+            this.networking.paddleMoved(position,playerId);
+        }
+        
     }
-    
+   
 }
+///Compute if the paddle location is within the bounds of the board.  We do not wish to move a paddle if any part of it will move it off the board.
+physicsEngine.prototype.paddlePositionWithinBounds = function(targetPaddle, desiredPosition) {
+    var max = this.boardElement.height() - (targetPaddle.height/2);
+    var min = targetPaddle.height/2;
+    return (desiredPosition < max && desiredPosition>min);
+}
+
+
 physicsEngine.prototype.moveOtherPaddle = function(playerId, position) {
     var targetPaddle = this.paddleDictionary["p" + playerId];
     targetPaddle.paddleBody.state.pos.y = position;    
