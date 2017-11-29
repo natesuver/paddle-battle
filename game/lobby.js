@@ -11,6 +11,7 @@ $(document).ready(function(){
 	first_load = true;
 	fillSelectBox();
 	bindEvents();
+	getPlayerStats(username);
 });
 
 function showSpinner()
@@ -449,6 +450,25 @@ function endGame(gameId) {
             alert('Something went wrong');
         }
     });
+}
+function getPlayerStats(username) {
+	$.ajax({
+        type: "POST",
+        url: "getStats.php",
+        data: {
+            username: username
+		},
+        dataType: 'json',
+        success: function(response){
+			var wins = response[0].wins;
+			var losses = response[0].losses;
+			$('#displayUser').html("<b>Welcome " + username + "!<br>(Record: " + wins + " wins, " + losses + " losses)</b>");
+        },
+        error: function(response){
+            alert('Something went wrong');
+        }
+	});
+    
 }
 
 function onBehavior(name, data) {

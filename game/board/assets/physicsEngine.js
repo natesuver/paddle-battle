@@ -125,7 +125,11 @@ physicsEngine.prototype.initializePhysics = function() {
 physicsEngine.prototype.recordBallImpact = function() {
     var ballBody = this.ballBody;
     if (ballBody) {
-        this.networking.ballImpact(ballBody.state);
+        var self = this;
+        setTimeout(function() { //delay transmission of ball location until after the actual collision to appease physics engine.
+            self.networking.ballImpact(ballBody.state);
+        },50)
+        
     }
 }
 
