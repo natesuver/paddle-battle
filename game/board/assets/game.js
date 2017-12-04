@@ -142,18 +142,18 @@ game.prototype.initBoard = function(gameData, url, serverName) {
 game.prototype.addListeners = function() {
     var obj = document.getElementById('gameBoard');
     var self = this;
-    gameBoard.addEventListener('touchmove', function(event) {
+    obj.addEventListener('touchmove', function(event) {
       // If there's exactly one finger inside this element
       if (event.targetTouches.length == 1) {
         var touch = event.targetTouches[0];
         self.engine.moveMyPaddle(self.playerId,touch.pageY); 
       }
     }, false);
-    gameBoard.addEventListener('mousemove', function(event) {
+    obj.addEventListener('mousemove', function(event) {
         self.engine.moveMyPaddle(self.playerId,event.pageY-40); 
     }, false);
     window.addEventListener('touchmove', function(event) {
-       e.preventDefault();
+        event.preventDefault();
       }, false);
     
 }
