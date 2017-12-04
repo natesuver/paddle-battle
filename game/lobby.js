@@ -11,7 +11,7 @@ $(document).ready(function(){
 	first_load = true;
 	fillSelectBox();
 	bindEvents();
-	getPlayerStats(username);
+	//getPlayerStats(username); //12-03-2017 feature removed by group consensus
 });
 
 function showSpinner()
@@ -451,6 +451,7 @@ function endGame(gameId) {
         }
     });
 }
+/*  12-03-2017 feature removed by group consensus
 function getPlayerStats(username) {
 	$.ajax({
         type: "POST",
@@ -470,6 +471,7 @@ function getPlayerStats(username) {
 	});
     
 }
+*/
 
 function onBehavior(name, data) {
 	var id = data.gameId;
