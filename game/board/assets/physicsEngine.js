@@ -41,7 +41,10 @@ physicsEngine.prototype.paddlePositionWithinBounds = function(targetPaddle, desi
 
 physicsEngine.prototype.moveOtherPaddle = function(playerId, position) {
     var targetPaddle = this.paddleDictionary["p" + playerId];
-    targetPaddle.paddleBody.state.pos.y = position;    
+    if (targetPaddle && targetPaddle.paddleBody) {
+        targetPaddle.paddleBody.state.pos.y = position;    
+    }
+    
 }
 
 physicsEngine.prototype.adjustState = function(ballState) {

@@ -1,7 +1,10 @@
 body {
     background-color: black;
+    position: relative;
 }
-
+html, body {
+    overflow-x: hidden;
+  }
 #countdown {
 	width: 100%;
 	height: 100%;

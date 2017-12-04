@@ -152,10 +152,6 @@ game.prototype.addListeners = function() {
     obj.addEventListener('mousemove', function(event) {
         self.engine.moveMyPaddle(self.playerId,event.pageY-40); 
     }, false);
-    window.addEventListener('touchmove', function(event) {
-        event.preventDefault();
-      }, false);
-    
 }
 game.prototype.getRandomBallStartPosition= function() {
     var rand = Math.floor(Math.random() * 2) + 1  
@@ -233,11 +229,6 @@ game.prototype.onBehavior = function(name, data) {
 } 
 
 $(document).ready(function() { 
-//this stops that "refresh when you swipe down" action from happening
-    document.body.addEventListener('touchmove', function(event) {
-    event.preventDefault();
-    }, false); 
-
     let params = (new URL(document.location)).searchParams;
     gameId = parseInt(params.get("gameId"));
     playerId = parseInt(params.get("playerId"));
