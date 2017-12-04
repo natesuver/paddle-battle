@@ -462,7 +462,7 @@ function getPlayerStats(username) {
         success: function(response){
 			var wins = response[0].wins;
 			var losses = response[0].losses;
-			$('#displayUser').html("<b>Welcome " + username + "!<br>(Record: " + wins + " wins, " + losses + " losses)</b>");
+			$('#displayUser').html("<b>Welcome " + username + "!<br>( Record: " + wins + " win(s), " + losses + " loss(es) )</b>");
         },
         error: function(response){
             alert('Something went wrong');
