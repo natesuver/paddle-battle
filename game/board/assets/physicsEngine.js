@@ -17,7 +17,7 @@ var physicsEngine = function(boardElement, teamA, teamB, networking, isMasterUse
     this.initializePhysics();
     this.addPaddles(teamA,this.TeamAStartXPosition);
     this.addPaddles(teamB,this.TeamBStartXPosition);
-    this.addBall(.4,.5);
+    this.addBall(.3,.4);
 }
 
 physicsEngine.prototype.moveMyPaddle = function(playerId, position) {
@@ -131,7 +131,7 @@ physicsEngine.prototype.recordBallImpact = function() {
         var self = this;
         setTimeout(function() { //delay transmission of ball location until after the actual collision to appease physics engine.
             self.networking.ballImpact(ballBody.state);
-        },50)
+        },30)
         
     }
 }
