@@ -140,16 +140,16 @@ game.prototype.initBoard = function(gameData, url, serverName) {
 
 //Setup listeners for the paddle position slider.  Supported by both touch and mouse.
 game.prototype.addListeners = function() {
-    var obj = document.getElementById('gameBoard');
+   // var obj = document.getElementById('gameBoard');
     var self = this;
-    obj.addEventListener('touchmove', function(event) {
+    document.body.addEventListener('touchmove', function(event) {
       // If there's exactly one finger inside this element
       if (event.targetTouches.length == 1) {
         var touch = event.targetTouches[0];
         self.engine.moveMyPaddle(self.playerId,touch.pageY); 
       }
     }, false);
-    obj.addEventListener('mousemove', function(event) {
+    document.body.addEventListener('mousemove', function(event) {
         self.engine.moveMyPaddle(self.playerId,event.pageY-40); 
     }, false);
 }
