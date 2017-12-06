@@ -17,7 +17,7 @@ var physicsEngine = function(boardElement, teamA, teamB, networking, isMasterUse
     this.initializePhysics();
     this.addPaddles(teamA,this.TeamAStartXPosition);
     this.addPaddles(teamB,this.TeamBStartXPosition);
-    this.addBall(.6,.8);
+    this.addBall(.4,.5);
 }
 
 physicsEngine.prototype.moveMyPaddle = function(playerId, position) {
